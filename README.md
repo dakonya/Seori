@@ -38,6 +38,8 @@ gh workflow run live-fim.yml --ref main -f regression=true
 
 The workflow runs `fim-file-created` three times with distinct run IDs. It changes the path filter of rule `100200` in the temporary Manager configuration, then restores the original XML. The middle run must record a native FAIL with zero matches. A separate Indexer query must find Wazuh rule `554` for the same agent, file path and time window. The job passes only after both runs with the original rule pass and all three file removals are confirmed.
 
+The recorded run produced **PASS → FAIL → PASS** with **1 → 0 → 1** matches and confirmed cleanup in every phase. [Result table and Indexer evidence](examples/live-fim-regression/README.md) · [Successful Actions run](https://github.com/dakonya/DetectionCI/actions/runs/45182772256)
+
 ## Run locally
 
 Requirements: Python 3.11 or newer on Linux or macOS; Windows users can run it in WSL2. The application uses the standard library and SQLite; no package download is required for fixture mode.

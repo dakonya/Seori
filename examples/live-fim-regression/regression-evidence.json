@@ -1,0 +1,20 @@
+{
+  "run_id": "f9eb39ca-f424-49d0-87e7-7a79ab7ee2dd",
+  "native_json_sha256": "758bdaa90bbad33d4be1421a5e6404258415cbcb8cd980f3c15c4de3d75de84f",
+  "query": {
+    "agent_id": "001",
+    "path": "/var/lib/detectionci/watch/f9eb39ca-f424-49d0-87e7-7a79ab7ee2dd.txt",
+    "event": "added",
+    "start": "2026-11-23T13:23:16.192Z",
+    "end": "2026-11-23T13:24:00.789Z"
+  },
+  "alerts": [
+    {
+      "rule_id": "554",
+      "agent_id": "001",
+      "path": "/var/lib/detectionci/watch/f9eb39ca-f424-49d0-87e7-7a79ab7ee2dd.txt",
+      "event": "added",
+      "timestamp": "2026-11-23T13:23:16.418+0000"
+    }
+  ]
+}

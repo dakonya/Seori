@@ -1,7 +1,7 @@
 {
   "name": "DetectionCI",
   "version": "0.1.0",
-  "source_files": 67,
+  "source_files": 69,
   "verification": "docs/verification-results.json",
   "verification_scope": "Initial build",
   "files": [
@@ -23,7 +23,7 @@
     },
     {
       "path": "README.md",
-      "sha256": "6ebdea6f78723f0de0b9fa16281203854dc72b7d869a3c5ccf873f1014e0c46b"
+      "sha256": "041928d0d438ff9333e2dbb14bbe08fe8d38c558955aaf54099b72f2533fbe85"
     },
     {
       "path": "START_HERE_RU.md",
@@ -120,6 +120,14 @@
     {
       "path": "examples/fixture-fim-created.json",
       "sha256": "014b3bc8bd922865b9d8dd99f342b39193fde82ffe5e6df75f5a92886cf39104"
+    },
+    {
+      "path": "examples/live-fim-regression/README.md",
+      "sha256": "3fcd313c2f49a8316922804e853ac40f5a9794b0126056cca5a677c1913b740b"
+    },
+    {
+      "path": "examples/live-fim-regression/regression-evidence.json",
+      "sha256": "6985d6acf348724053b7a31dec8f4446e59ad0b4c52dc93f43315c71a0603452"
     },
     {
       "path": "examples/replay/ssh-invalid-user.json",
