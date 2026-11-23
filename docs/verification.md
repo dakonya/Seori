@@ -1,8 +1,12 @@
 # Verification and demonstration
 
-## What was and was not exercised
+## Wazuh integration status
 
-The initial implementation environment has Python 3.13.5. It has no Docker command, no configured Wazuh endpoint and no accelerated VM device. Consequently the initial release must not claim a successful real Wazuh replay or live execution. Controlled HTTP responses and synthetic alerts test software behaviour only.
+All three SSH replay scenarios passed on Wazuh Manager **4.14.10-1** with pre-recorded log lines. The reports record the manager's logtest results and the assertions applied to them. During public release preparation on 23 November 2026, `bash lab/detectionci-replay.sh --suite` reproduced all three PASS verdicts on the same manager version. Live verification with a Wazuh agent and indexer remains pending. [Replay command and JSON reports](../README.md#replay-ssh-logs-on-linux)
+
+## Initial build verification
+
+The initial implementation environment had Python 3.13.5, no Docker command, no configured Wazuh endpoint and no accelerated VM device. The table records what was exercised in that environment.
 
 | Experiment | Expected scope | Initial status |
 | --- | --- | --- |
@@ -16,9 +20,11 @@ The initial implementation environment has Python 3.13.5. It has no Docker comma
 | VM FIM create/modify/delete | Actual endpoint-to-indexer detection path | NOT RUN in initial environment |
 | Independent installation | Reproduction by someone other than the developer | NOT RUN in initial environment |
 
-Use the commands below to produce evidence for the current checkout. Do not copy a test count from an older release.
+Five tests skipped in that environment because the execution sandbox rejected local socket binding. In-memory HTTP transport tests exercised the request parser. [Initial machine-readable verification record](verification-results.json)
 
-The machine-readable record for this source snapshot is [verification-results.json](verification-results.json). Five tests skip because the execution sandbox rejects local socket binding. Equivalent in-memory HTTP transport tests execute, but do not replace genuine network or Wazuh integration testing.
+## Release preparation checks
+
+On Python 3.13.5, all 152 unit and transport tests passed, including the five loopback socket tests. Use the commands below to verify the current checkout.
 
 ```bash
 python3 -m unittest discover -s tests -v

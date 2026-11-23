@@ -10,11 +10,11 @@ Tests cover atomic job claims, cancellation races, crash recovery, target recove
 
 A separate review found and corrected three implementation defects before packaging: authentication and routing interpreted request targets differently; a wrong-event FIM baseline could be accepted; a late indexer response could satisfy an expired observation window. Each correction has a regression test.
 
-The current verification record has 147 successful automated tests, five skipped socket tests and no failures. All sixteen labelled fixture cases produce their expected verdicts. These numbers describe this source snapshot and must be refreshed after code changes.
+The initial build recorded 147 successful automated tests, five skipped socket tests and no failures. All sixteen labelled fixture cases produced their expected verdicts. [Initial verification record](verification-results.json)
 
 ## Integration boundary
 
-The source contains a real Wazuh client and restricted SSH executor. Neither real Wazuh replay nor the complete SSH/Wazuh live workflow has run in the build environment. Browser rendering and an independent installation remain unverified. TLS trust, API permissions, actual field mappings and pinned Wazuh compatibility must be confirmed on the prepared lab.
+The initial build environment did not run Wazuh integration. In a later run, all three SSH scenarios passed on Wazuh Manager **4.14.10-1** using pre-recorded log lines. Live verification from the endpoint agent through the indexer remains pending, along with browser rendering and an independent installation. [Replay results and reports](../README.md#replay-ssh-logs-on-linux)
 
 Live observations confirm the remote file state and indexed alerts. They do not independently observe every collection or manager-processing stage. Negative live assertions remain inconclusive without independent collection-coverage evidence. VM restoration is an operator action; the controller preserves a block after unverified cleanup or interruption.
 

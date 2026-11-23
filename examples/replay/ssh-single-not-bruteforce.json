@@ -1,0 +1,221 @@
+{
+  "report_schema": "detectionci.run.v1",
+  "tool_version": "0.1.0",
+  "run": {
+    "id": "6f357972-ae0b-4751-9491-2703f0de7ac5",
+    "scenario_id": "ssh-single-not-bruteforce",
+    "scenario_version": "1.0.0",
+    "scenario": {
+      "description": "One invalid-user event must not satisfy the burst rule 5712 in an isolated logtest session.",
+      "expect": {
+        "max_alerts": 0,
+        "min_alerts": 0,
+        "predicates": [
+          {
+            "field": "rule.id",
+            "op": "eq",
+            "value": "5712"
+          }
+        ]
+      },
+      "fixture": {
+        "alerts": [
+          {
+            "agent": {
+              "id": "001",
+              "name": "detectionci-lab"
+            },
+            "data": {
+              "srcip": "192.0.2.25",
+              "srcport": "48928",
+              "srcuser": "dci_fixture"
+            },
+            "rule": {
+              "description": "Synthetic fixture event; not a measured Wazuh result",
+              "id": "5710",
+              "level": 5
+            },
+            "timestamp": "2026-11-17T12:00:00.000Z"
+          }
+        ],
+        "checkpoints": [
+          {
+            "detail": "Synthetic fixture checkpoint used only to test evaluation logic.",
+            "name": "action",
+            "status": "observed"
+          },
+          {
+            "detail": "Synthetic fixture checkpoint used only to test evaluation logic.",
+            "name": "source",
+            "status": "observed"
+          },
+          {
+            "detail": "Synthetic fixture checkpoint used only to test evaluation logic.",
+            "name": "manager",
+            "status": "observed"
+          },
+          {
+            "detail": "Synthetic fixture checkpoint used only to test evaluation logic.",
+            "name": "alert",
+            "status": "observed"
+          }
+        ]
+      },
+      "id": "ssh-single-not-bruteforce",
+      "kind": "control",
+      "metadata": {
+        "fixture_notice": "All embedded events and checkpoints are synthetic. Fixture PASS validates software logic only.",
+        "supported_modes": [
+          "fixture",
+          "replay"
+        ]
+      },
+      "replay": [
+        "Nov 17 12:00:00 detectionci-lab sshd[29205]: Invalid user dci_fixture from 192.0.2.25 port 48928"
+      ],
+      "timeout_seconds": 45,
+      "title": "Control: one failure is not a burst",
+      "version": "1.0.0"
+    },
+    "mode": "replay",
+    "status": "completed",
+    "verdict": "PASS",
+    "result": {
+      "assertions": [
+        {
+          "actual": 0,
+          "expected": {
+            "max_alerts": 0,
+            "min_alerts": 0
+          },
+          "id": "matching-alert-count",
+          "message": "0 matching alerts among 1 observed alerts",
+          "verdict": "PASS"
+        }
+      ],
+      "checkpoints": [],
+      "evidence": [
+        {
+          "data": {
+            "agent": {
+              "id": "000",
+              "name": "detectionci-replay"
+            },
+            "data": {
+              "srcip": "192.0.2.25",
+              "srcport": "48928",
+              "srcuser": "dci_fixture"
+            },
+            "decoder": {
+              "name": "sshd",
+              "parent": "sshd"
+            },
+            "full_log": "Nov 17 12:00:00 detectionci-lab sshd[29205]: Invalid user dci_fixture from 192.0.2.25 port 48928",
+            "id": "1795434067.0",
+            "location": "detectionci->replay",
+            "manager": {
+              "name": "detectionci-replay"
+            },
+            "predecoder": {
+              "hostname": "detectionci-lab",
+              "program_name": "sshd",
+              "timestamp": "Nov 17 12:00:00"
+            },
+            "rule": {
+              "description": "sshd: Attempt to login using a non-existent user",
+              "firedtimes": 1,
+              "gdpr": [
+                "IV_35.7.d",
+                "IV_32.2"
+              ],
+              "gpg13": [
+                "7.1"
+              ],
+              "groups": [
+                "syslog",
+                "sshd",
+                "authentication_failed",
+                "invalid_login"
+              ],
+              "hipaa": [
+                "164.312.b"
+              ],
+              "id": "5710",
+              "level": 5,
+              "mail": false,
+              "mitre": {
+                "id": [
+                  "T1110.001",
+                  "T1021.004"
+                ],
+                "tactic": [
+                  "Credential Access",
+                  "Lateral Movement"
+                ],
+                "technique": [
+                  "Password Guessing",
+                  "SSH"
+                ]
+              },
+              "nist_800_53": [
+                "AU.14",
+                "AC.7",
+                "AU.6"
+              ],
+              "pci_dss": [
+                "10.2.4",
+                "10.2.5",
+                "10.6.1"
+              ],
+              "tsc": [
+                "CC6.1",
+                "CC6.8",
+                "CC7.2",
+                "CC7.3"
+              ]
+            },
+            "timestamp": "2026-11-23T11:41:07.915000Z"
+          },
+          "hash_scope": "stored redacted evidence data",
+          "id": "alert-1",
+          "kind": "alert",
+          "sha256": "4daf7aac3e7ccaf769fbd328dc90f806842888c2bc3456cd07db7029d45efd3a"
+        },
+        {
+          "data": {
+            "lines": 1,
+            "sha256": "a1053f003bc607e049c0e5cdad7d299312eb45b18d1960995bf73731eefd9924"
+          },
+          "hash_scope": "stored redacted evidence data",
+          "id": "63bd7442-a974-441d-b265-b8c1061e64f3",
+          "kind": "replay_input_hash",
+          "sha256": "4de4541cfbe109258f48755d0dafab346a346f5b2e695b6fb60c8a7b482424f4"
+        }
+      ],
+      "metadata": {
+        "config_attestation": "Operator configuration hash; not an attestation of loaded SIEM rules.",
+        "duration_seconds": 0.6135,
+        "engine_version": "0.1.0",
+        "evidence_hash_scope": "SHA-256 of exported, redacted evidence data",
+        "external_systems_contacted": true,
+        "finished_at": "2026-11-23T11:41:07.940Z",
+        "fixture_only": false,
+        "limitation": "Checks supplied log decoding/rules only; does not validate endpoint collection or delivery.",
+        "matched_alerts": 0,
+        "mode": "replay",
+        "operator_config_sha256": "d9a7b3ea6e5860798eb9e9a067a6cd3c1adbccca3b842198743f80e60c144b7f",
+        "scenario_sha256": "19fda074142d4bb5c52edcb1466626ff843ed8dd39a5d3a29ca635e9ad68c350",
+        "total_alerts": 1,
+        "validation_scope": "wazuh_rules"
+      },
+      "summary": "ssh-single-not-bruteforce: PASS; 0 matching alerts",
+      "verdict": "PASS"
+    },
+    "created_at": "2026-11-23T11:41:07.325Z",
+    "started_at": "2026-11-23T11:41:07.326Z",
+    "finished_at": "2026-11-23T11:41:07.942Z",
+    "cancel_requested": false,
+    "suite_id": "529aa507-a4cb-4295-bace-78d4a7990f92"
+  },
+  "notice": "Fixture validates local logic; replay validates Wazuh rules on supplied logs; live validates only observed stages. Redaction is best effort; review before sharing."
+}

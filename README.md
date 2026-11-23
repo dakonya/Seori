@@ -1,8 +1,26 @@
 # DetectionCI
 
-DetectionCI tests whether a security detection still works after a rule or configuration changes. It records expected alerts, observed checkpoints and the evidence used to reach a verdict.
+DetectionCI checks for detection regressions after a rule or configuration change. It runs scenarios with explicit alert expectations and exports the verdict, observed alerts and evidence hashes in JSON and HTML reports.
 
-The first release supports local evaluation of labelled fixtures, native Wazuh log replay and a restricted live file-integrity workflow on an explicitly configured Linux VM. **Fixture results are synthetic software checks. They do not demonstrate that a real Wazuh installation detects the behaviour.**
+The three SSH replay scenarios passed on Wazuh Manager **4.14.10-1** using pre-recorded log lines. Replay verifies Wazuh's decoders and rules for those inputs. End-to-end live verification with a Wazuh agent is pending.
+
+## Replay SSH logs on Linux
+
+Install Podman with your distribution's package manager. On Debian or Ubuntu, use `sudo apt install podman`. Run the suite from the root of the cloned repository as a regular user with rootless Podman.
+
+```bash
+bash lab/detectionci-replay.sh --suite
+```
+
+The first build downloads the Ubuntu base image and Wazuh packages. `bash lab/detectionci-replay.sh` runs just `ssh-invalid-user`. The script prints the directory for the generated JSON and HTML reports under `reports/`.
+
+| Scenario | Expected rule matches | Rule returned by Wazuh | Verdict |
+| --- | --- | --- | --- |
+| [ssh-invalid-user](examples/replay/ssh-invalid-user.json) | At least one match for `5710` | `5710` | PASS |
+| [ssh-single-not-bruteforce](examples/replay/ssh-single-not-bruteforce.json) | Zero matches for `5712` after a single failed login | `5710` | PASS |
+| [ssh-success-control](examples/replay/ssh-success-control.json) | Zero matches for `5710` after a successful login | `5715` | PASS |
+
+Each control counts matches for its specified rule. Wazuh returned one alert in each control, with a different rule ID from the one under test. The matching count was zero in both controls, so both passed.
 
 ## Run locally
 
@@ -54,20 +72,7 @@ Four intentionally non-passing fixture scenarios live in `fixtures/fault-scenari
 
 ## Wazuh lab
 
-Follow [the lab guide](lab/README.md). It provides a preparation script for the official `wazuh/wazuh-docker` release `v4.14.10`, custom FIM rules, an agent configuration fragment and an example client configuration. It does not start Docker, create cloud resources or modify the host automatically.
-
-Live operation additionally requires a separate Linux VM, its Wazuh agent, Python 3, OpenSSH access with a verified host key and access to the Wazuh APIs. The application verifies TLS certificates. Configure certificates for the exact DNS names used by the client.
-
-```bash
-export DCI_WAZUH_MANAGER_USERNAME='detectionci'
-export DCI_WAZUH_MANAGER_PASSWORD='your-manager-password'
-export DCI_WAZUH_INDEXER_USERNAME='detectionci-reader'
-export DCI_WAZUH_INDEXER_PASSWORD='your-indexer-password'
-python3 -m detectionci --config lab/config.example.json run ssh-invalid-user --mode replay
-python3 -m detectionci --config lab/config.example.json run fim-file-created --mode live
-```
-
-Edit the example's hostnames, certificate paths, SSH identity and agent ID before use. Do not store real credentials in the example file or commit them.
+For live tests, prepare a separate Linux VM with a Wazuh agent, Python 3 and OpenSSH access with a verified host key. The controller needs access to the Wazuh APIs with trusted TLS certificates. The lab guide covers the pinned `wazuh-docker` release `v4.14.10`, custom FIM rules, agent setup and commands for the configured lab. [Wazuh lab guide](lab/README.md)
 
 ## Verification and trust
 
@@ -79,7 +84,7 @@ python3 -m detectionci verify-fixtures
 python3 -m detectionci suite --mode fixture --output artifacts/fixture-suite
 ```
 
-The repository includes transport-level tests using controlled responses. They do not replace replay or live integration against Wazuh. See [verification](docs/verification.md) for exact acceptance experiments and a record template. **A real Wazuh live run has not been verified in the initial build environment**, where Docker, a Wazuh service and VM acceleration were unavailable.
+The repository includes transport-level tests using controlled responses. The initial build environment lacked Docker, a Wazuh service and VM acceleration. The verification guide records those initial checks, the later manager replay and the remaining live acceptance experiments. [Verification guide](docs/verification.md)
 
 Only PASS is a successful required CI check. FAIL, ERROR, INCONCLUSIVE and CANCELLED must not become a green security gate. CI in this repository runs software and fixture checks without Wazuh credentials. It does not expose a privileged live runner to pull requests.
 

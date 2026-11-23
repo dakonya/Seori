@@ -1,8 +1,9 @@
 {
   "name": "DetectionCI",
   "version": "0.1.0",
-  "source_files": 56,
+  "source_files": 60,
   "verification": "docs/verification-results.json",
+  "verification_scope": "Initial build",
   "files": [
     {
       "path": ".github/workflows/ci.yml",
@@ -18,11 +19,11 @@
     },
     {
       "path": "README.md",
-      "sha256": "a1bfafaf6710dc02195c15028b4be0226ee716f9abad87d68498a4495a32625a"
+      "sha256": "f07de0f99953a1760da61708c42635e95bfdd90c4a59fea1cf3f0c2714d5919f"
     },
     {
       "path": "START_HERE_RU.md",
-      "sha256": "d14272e2a3524f59352c670d940d964a2cc826aceabf2535627bd5bd9c4e3f04"
+      "sha256": "6a9fd1818ec6de79c096bbad3cf1b05e24ed60f0b6d304acffb88fae1bcbd552"
     },
     {
       "path": "detectionci/__init__.py",
@@ -90,7 +91,7 @@
     },
     {
       "path": "docs/release-notes.md",
-      "sha256": "18e9a5746f00d3bcbf770c6c771166f4a7ca44e65891962ff65e508c331d978e"
+      "sha256": "ea37e4b3bae043e15250cf33032b75cfc26040bc669cb0cfcff75b2f58fa85f2"
     },
     {
       "path": "docs/scenarios.md",
@@ -106,7 +107,7 @@
     },
     {
       "path": "docs/verification.md",
-      "sha256": "2d7c8b194d36013e216617124b8489d1f37a77e59c310aa81d4e80b13af4697e"
+      "sha256": "99e33f523545402fe5cce12ac5958722cf2e67dc4a9405a8939fa1b822166c37"
     },
     {
       "path": "examples/fixture-fim-created.html",
@@ -115,6 +116,18 @@
     {
       "path": "examples/fixture-fim-created.json",
       "sha256": "014b3bc8bd922865b9d8dd99f342b39193fde82ffe5e6df75f5a92886cf39104"
+    },
+    {
+      "path": "examples/replay/ssh-invalid-user.json",
+      "sha256": "ad81bd1d571142534a6c1c4f2bad4e37b7c6b53e20c8f9fb67769524f15aec8a"
+    },
+    {
+      "path": "examples/replay/ssh-single-not-bruteforce.json",
+      "sha256": "70b80256c02c2ad5ad71e39cf00235b6fa92bc4ed9c5c10d615784bf430a5bee"
+    },
+    {
+      "path": "examples/replay/ssh-success-control.json",
+      "sha256": "cf5a5d03bd6654bc8b6bab6acac9c1630297cf58881704589956dd32b0be312f"
     },
     {
       "path": "fixtures/fault-scenarios/fault-control-false-alert.json",
@@ -134,7 +147,7 @@
     },
     {
       "path": "lab/README.md",
-      "sha256": "5aa3898031dff9d73bf38f9a719d30cf262ff83b4a23deffa293560c9be8fbfe"
+      "sha256": "10aea954d6486114c81870e33a994a37a260135c4988fcc719dc14cdc5913f9e"
     },
     {
       "path": "lab/agent-syscheck-fragment.xml",
@@ -143,6 +156,10 @@
     {
       "path": "lab/config.example.json",
       "sha256": "b0719ec70c4d7e10cd0476660afad9ba974842615a6d116aa2c2aa4d74195f3a"
+    },
+    {
+      "path": "lab/detectionci-replay.sh",
+      "sha256": "b27ddbf7b0faad3dffd35b1e54ef2652493b570c593f2a9b7c460e598f439e20"
     },
     {
       "path": "lab/detectionci_fim.xml",

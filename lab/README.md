@@ -1,6 +1,6 @@
 # Wazuh and Linux lab
 
-This guide prepares a separate test environment. No real Wazuh deployment or live run was executed in the initial build environment. The first integration against the pinned version remains a required acceptance experiment.
+This guide prepares the separate lab for live tests. All three SSH scenarios passed on Wazuh Manager **4.14.10-1** using pre-recorded logs. Live verification with a Wazuh agent and indexer remains pending. [Linux/Podman replay and JSON reports](../README.md#replay-ssh-logs-on-linux)
 
 ## Topology and requirements
 
@@ -74,6 +74,8 @@ export DCI_WAZUH_INDEXER_PASSWORD='your-indexer-password'
 The configuration loader expands an entire `${DCI_*}` string from the environment. Hostnames and paths in the example must be replaced. Keep configuration and SSH private-key permissions private.
 
 ## 4. Run replay before live
+
+Use these commands to check replay against the manager configured for this lab. The Podman command in the project README runs all three SSH scenarios in a dedicated container. [Podman quick start](../README.md#replay-ssh-logs-on-linux)
 
 ```bash
 python3 -m detectionci --config lab/config.example.json run ssh-invalid-user --mode replay --output artifacts/replay-ssh
