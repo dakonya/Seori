@@ -1,0 +1,17 @@
+services:
+  wazuh.manager:
+    restart: "no"
+    ports: !override
+      - "127.0.0.1:1514:1514"
+      - "127.0.0.1:1515:1515"
+    environment:
+      INDEXER_PASSWORD: ${DCI_WAZUH_INDEXER_PASSWORD:?}
+      API_PASSWORD: ${DCI_WAZUH_API_PASSWORD:?}
+    volumes:
+      - ./config/detectionci_fim.xml:/wazuh-config-mount/etc/rules/detectionci_fim.xml:ro
+  wazuh.indexer:
+    restart: "no"
+    ports: !override
+      - "127.0.0.1:9200:9200"
+  wazuh.dashboard:
+    profiles: [dashboard]

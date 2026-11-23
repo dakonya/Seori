@@ -1,13 +1,17 @@
 {
   "name": "DetectionCI",
   "version": "0.1.0",
-  "source_files": 60,
+  "source_files": 65,
   "verification": "docs/verification-results.json",
   "verification_scope": "Initial build",
   "files": [
     {
       "path": ".github/workflows/ci.yml",
       "sha256": "51ba46b8dcd0369f79daa751f189911d31beb51191c6eb86f889fdebd851df67"
+    },
+    {
+      "path": ".github/workflows/live-fim.yml",
+      "sha256": "8f62b11906147111ce60dd1aacd91144cfe960508d5a85401107149dc883a810"
     },
     {
       "path": ".gitignore",
@@ -152,6 +156,22 @@
     {
       "path": "lab/agent-syscheck-fragment.xml",
       "sha256": "abd6a05a7a87cf4c36222a64dcaf338c52959c2811e58599c11097ae8dedaab8"
+    },
+    {
+      "path": "lab/ci/prepare-agent.sh",
+      "sha256": "7bf5e4cae7e314cd0e7708a165622b184510a60c0a08b1c846ee840c70853328"
+    },
+    {
+      "path": "lab/ci/verify-live-report.py",
+      "sha256": "21421e6f3be8691ea375bab3253ddb5a12d266a60015f84b8a6a3c06e775170f"
+    },
+    {
+      "path": "lab/ci/wazuh-compose.yml",
+      "sha256": "cbb2b7e780b929d73550369b54933feeab529c224c7cc4baa4a12f2e020ed732"
+    },
+    {
+      "path": "lab/ci/wazuh-stack.sh",
+      "sha256": "f0341d12e2b2f63037c970cd952df9c416bbac0c377dd0715d31bf43124dbbdd"
     },
     {
       "path": "lab/config.example.json",

@@ -1,0 +1,122 @@
+name: Live FIM smoke test
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  fim-created:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Measure available space before deployment
+        id: disk_before
+        run: |
+          work_dir="$RUNNER_TEMP/detectionci-live"
+          install -d -m 0700 "$work_dir" "$work_dir/reports"
+          docker_root=$(docker info --format '{{.DockerRootDir}}')
+          printf 'DCI_CI_DIR=%s\nDCI_CI_DOCKER_ROOT=%s\n' "$work_dir" "$docker_root" >> "$GITHUB_ENV"
+          echo "CPU threads: $(nproc)"
+          free -m
+          {
+            printf '### Available disk before deployment (bytes)\n\n```text\n'
+            df -B1 --output=source,target,avail / "$docker_root" | uniq
+            printf '```\n\n'
+          } | tee -a "$GITHUB_STEP_SUMMARY"
+
+      - name: Start Wazuh Manager and Indexer
+        run: bash lab/ci/wazuh-stack.sh "$DCI_CI_DIR"
+
+      - name: Enrol the runner and wait for realtime FIM
+        run: bash lab/ci/prepare-agent.sh "$DCI_CI_DIR"
+
+      - name: Wait for the real alert index
+        run: bash lab/ci/wazuh-stack.sh "$DCI_CI_DIR" wait-alerts
+
+      - name: Measure available space after deployment
+        if: ${{ !cancelled() && steps.disk_before.outcome == 'success' }}
+        run: |
+          {
+            printf '### Available disk after deployment attempt (bytes)\n\n```text\n'
+            df -B1 --output=source,target,avail / "$DCI_CI_DOCKER_ROOT" | uniq
+            printf '```\n\n'
+          } | tee -a "$GITHUB_STEP_SUMMARY"
+
+      - name: Run and verify fim-file-created in live mode
+        id: live
+        env:
+          no_proxy: 127.0.0.1,localhost,wazuh.indexer
+        run: |
+          umask 077
+          set -a
+          source "$DCI_CI_DIR/wazuh.env"
+          set +a
+          python3 - "$DCI_CI_DIR/config.json" <<'PY'
+          import json
+          import os
+          from pathlib import Path
+          import sys
+
+          env = os.environ
+          config = {
+              "wazuh": {
+                  "indexer_url": env["DCI_WAZUH_INDEXER_URL"],
+                  "indexer_username": env["DCI_WAZUH_INDEXER_USERNAME"],
+                  "indexer_password": "${DCI_WAZUH_INDEXER_PASSWORD}",
+                  "ca_file": env["DCI_WAZUH_CA_FILE"],
+              },
+              "live": {
+                  "host": "127.0.0.1",
+                  "port": int(env["DCI_CI_SSH_PORT"]),
+                  "user": env["DCI_CI_SSH_USER"],
+                  "identity_file": env["DCI_CI_SSH_KEY"],
+                  "known_hosts": env["DCI_CI_SSH_KNOWN_HOSTS"],
+                  "agent_id": env["DCI_CI_AGENT_ID"],
+                  "watch_root": "/var/lib/detectionci/watch",
+              },
+          }
+          Path(sys.argv[1]).write_text(json.dumps(config), encoding="utf-8")
+          PY
+          python3 -m detectionci --db "$DCI_CI_DIR/runs.sqlite3" --config "$DCI_CI_DIR/config.json" \
+            run fim-file-created --mode live --output "$DCI_CI_DIR/reports"
+          PYTHONPATH=. python3 lab/ci/verify-live-report.py "$DCI_CI_DIR/reports" "$DCI_CI_AGENT_ID" \
+            | tee -a "$GITHUB_STEP_SUMMARY"
+
+      - name: Check report pair before upload
+        id: report
+        if: ${{ !cancelled() && (steps.live.outcome == 'success' || steps.live.outcome == 'failure') }}
+        run: |
+          shopt -s nullglob
+          reports=("$DCI_CI_DIR/reports/"*.json)
+          if (( ${#reports[@]} == 0 )); then
+            echo 'DetectionCI did not export a JSON report.'
+            exit 0
+          fi
+          set -a
+          source "$DCI_CI_DIR/wazuh.env"
+          set +a
+          PYTHONPATH=. python3 lab/ci/verify-live-report.py "$DCI_CI_DIR/reports" "$DCI_CI_AGENT_ID" --artifacts-only
+          echo 'safe=true' >> "$GITHUB_OUTPUT"
+
+      - name: Upload Live FIM JSON and HTML
+        if: ${{ !cancelled() && steps.report.outputs.safe == 'true' }}
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: live-fim-report
+          path: |
+            ${{ runner.temp }}/detectionci-live/reports/*.json
+            ${{ runner.temp }}/detectionci-live/reports/*.html
+          if-no-files-found: error
+
+      - name: Collect service status on failure
+        if: ${{ failure() && steps.disk_before.outcome == 'success' }}
+        run: bash lab/ci/wazuh-stack.sh "$DCI_CI_DIR" diagnostics
