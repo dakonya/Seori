@@ -1,4 +1,4 @@
-# Seori (서리)
+# Seori
 
 Seori checks for detection regressions after a rule or configuration change. It runs scenarios with explicit alert expectations and exports the verdict, observed alerts and evidence hashes in JSON and HTML reports.
 
