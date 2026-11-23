@@ -52,9 +52,14 @@ indexer_ready() {
         jq --exit-status '.timed_out == false and (.status == "yellow" or .status == "green")' >/dev/null
 }
 
+manager_status() {
+    compose exec -T wazuh.manager /var/ossec/bin/wazuh-control status
+}
+
 manager_ready() {
     local status
-    status=$(compose exec -T wazuh.manager /var/ossec/bin/wazuh-control status 2>/dev/null) || return 1
+    # The aggregate status exits nonzero when optional daemons are stopped.
+    status=$(manager_status 2>/dev/null || true)
     [[ "$status" == *'wazuh-analysisd is running'* &&
        "$status" == *'wazuh-authd is running'* &&
        "$status" == *'wazuh-remoted is running'* ]]
@@ -163,6 +168,7 @@ EOF
         compose ps -a || true
         indexer_request '/_cluster/health' --show-error --output /dev/null \
             --write-out 'Indexer health HTTP status: %{http_code}\n' || true
+        manager_status 2>/dev/null | grep -E '^wazuh-(analysisd|authd|remoted) (is running|not running)' || true
         containers=$(compose ps -aq wazuh.manager wazuh.indexer)
         if [[ -n "$containers" ]]; then
             while IFS= read -r container; do
