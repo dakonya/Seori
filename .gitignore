@@ -1,0 +1,16 @@
+__pycache__/
+*.py[cod]
+.venv/
+.detectionci/
+*.sqlite3*
+*.worker.lock
+*.target-state.json
+reports/
+build/
+dist/
+*.egg-info/
+lab/vendor/
+lab/config.local.json
+.env
+*.pem
+*.key

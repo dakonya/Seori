@@ -1,0 +1,21 @@
+{
+  "wazuh": {
+    "manager_url": "https://wazuh.manager:55000",
+    "manager_username": "${DCI_WAZUH_MANAGER_USERNAME}",
+    "manager_password": "${DCI_WAZUH_MANAGER_PASSWORD}",
+    "indexer_url": "https://wazuh.indexer:9200",
+    "indexer_username": "${DCI_WAZUH_INDEXER_USERNAME}",
+    "indexer_password": "${DCI_WAZUH_INDEXER_PASSWORD}",
+    "ca_file": "/absolute/path/to/lab-ca-bundle.pem",
+    "request_timeout": 10
+  },
+  "live": {
+    "host": "detectionci-target.internal",
+    "port": 22,
+    "user": "dci",
+    "identity_file": "/absolute/path/to/detectionci_lab_ed25519",
+    "known_hosts": "/absolute/path/to/detectionci_known_hosts",
+    "agent_id": "001",
+    "watch_root": "/var/lib/detectionci/watch"
+  }
+}

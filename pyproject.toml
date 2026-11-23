@@ -1,0 +1,26 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "detectionci"
+version = "0.1.0"
+description = "Evidence-based Wazuh detection validation with fixture, replay and live modes"
+requires-python = ">=3.11"
+dependencies = []
+readme = "README.md"
+license = {text = "MIT"}
+classifiers = ["Programming Language :: Python :: 3", "Operating System :: POSIX :: Linux", "Topic :: Security"]
+
+[project.scripts]
+detectionci = "detectionci.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["detectionci*"]
+
+[tool.setuptools.package-data]
+detectionci = ["static/*"]
+
+[tool.setuptools.data-files]
+"share/detectionci/scenarios" = ["scenarios/*.json"]
+"share/detectionci/fixtures/fault-scenarios" = ["fixtures/fault-scenarios/*.json"]

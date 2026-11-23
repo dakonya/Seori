@@ -1,0 +1,38 @@
+{
+  "command": "python3 -m unittest discover -s tests -v",
+  "python": "3.13.5",
+  "platform": "Linux",
+  "tests_discovered": 152,
+  "passed": 147,
+  "failures": 0,
+  "errors": 0,
+  "skipped": [
+    {
+      "test": "test_api_error_over_http (test_wazuh.LoopbackHTTPTests.test_api_error_over_http)",
+      "reason": "Loopback HTTP unavailable: PermissionError"
+    },
+    {
+      "test": "test_bad_json_over_http (test_wazuh.LoopbackHTTPTests.test_bad_json_over_http)",
+      "reason": "Loopback HTTP unavailable: PermissionError"
+    },
+    {
+      "test": "test_complete_replay_http_protocol (test_wazuh.LoopbackHTTPTests.test_complete_replay_http_protocol)",
+      "reason": "Loopback HTTP unavailable: PermissionError"
+    },
+    {
+      "test": "test_indexer_http_method_and_basic_credentials (test_wazuh.LoopbackHTTPTests.test_indexer_http_method_and_basic_credentials)",
+      "reason": "Loopback HTTP unavailable: PermissionError"
+    },
+    {
+      "test": "test_redirect_not_followed_and_credentials_not_forwarded (test_wazuh.LoopbackHTTPTests.test_redirect_not_followed_and_credentials_not_forwarded)",
+      "reason": "Loopback HTTP unavailable: PermissionError"
+    }
+  ],
+  "successful": true,
+  "duration_seconds": 11.891,
+  "real_wazuh_replay": "NOT RUN",
+  "real_wazuh_live": "NOT RUN",
+  "browser_rendering": "NOT RUN: local file URLs prohibited and loopback socket binding unavailable",
+  "http_api_verification": "Actual BaseHTTPRequestHandler wire parsing exercised with in-memory connections",
+  "fixture_scope": "Synthetic fixture logic only; no SIEM detection claim"
+}

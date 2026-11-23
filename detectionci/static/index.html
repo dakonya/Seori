@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <meta name="description" content="DetectionCI — reproducible security detection validation, with evidence at every observed stage.">
+  <title>DetectionCI · Detection validation</title>
+  <link rel="stylesheet" href="/style.css">
+  <script src="/app.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to workspace</a>
+  <aside class="sidebar" aria-label="Application navigation">
+    <a class="brand" href="/" aria-label="DetectionCI home"><span class="brand-mark" aria-hidden="true">D<span>CI</span></span><span>Detection<span class="brand-ci">CI</span><small>DETECTION ASSURANCE</small></span></a>
+    <div class="sidebar-label">WORKSPACE</div>
+    <nav>
+      <a class="nav-link active" href="#workspace"><span aria-hidden="true">▦</span> Validation</a>
+      <a class="nav-link" href="#runs-section"><span aria-hidden="true">↗</span> Run history <span id="nav-run-count" class="nav-count">0</span></a>
+      <a class="nav-link" href="#baselines-section"><span aria-hidden="true">◈</span> Baselines</a>
+    </nav>
+    <div class="sidebar-bottom">
+      <div class="environment-card">
+        <div class="sidebar-label">CONTROLLER</div>
+        <div class="connection"><span id="connection-dot" class="connection-dot unknown"></span><span id="connection-label">Connecting…</span></div>
+        <p id="worker-label">Checking local worker</p>
+        <span id="version-label" class="mono muted">VERSION —</span>
+      </div>
+      <details class="auth-box">
+        <summary>Connection settings</summary>
+        <label for="api-token">API bearer token</label>
+        <input id="api-token" type="password" autocomplete="off" spellcheck="false" placeholder="Only if configured">
+        <button id="apply-token" class="button button-subtle" type="button">Connect</button>
+        <p>Kept in this tab’s memory. Never saved to browser storage.</p>
+      </details>
+      <p class="sidebar-footnote">Evidence before assurance.<br>Local-first. Explicit scope.</p>
+    </div>
+  </aside>
+
+  <main id="main">
+    <header class="topbar">
+      <div class="breadcrumb">Workspace <span>/</span> <strong>Validation</strong></div>
+      <div class="topbar-actions"><span class="local-pill"><span aria-hidden="true">●</span> LOCAL WORKSPACE</span><button id="refresh" class="button button-subtle compact" type="button">↻ <span>Refresh</span></button></div>
+    </header>
+
+    <div class="content">
+      <section class="page-heading" aria-labelledby="page-title">
+        <div><div class="eyebrow">DETECTION ENGINEERING / CONTINUOUS VALIDATION</div><h1 id="page-title">Trust starts with a test<span>.</span></h1><p>Run a scenario. Follow the evidence. Catch the regression.</p></div>
+        <div class="heading-aside"><span class="heading-line"></span><span>Every result has<br>a defined scope.</span></div>
+      </section>
+
+      <div id="notice" class="notice" role="status" aria-live="polite" hidden><span id="notice-text"></span><button id="dismiss-notice" type="button" aria-label="Dismiss notification">×</button></div>
+
+      <section class="stats-grid" aria-label="Loaded run statistics">
+        <article class="stat"><span class="stat-label">RECENT RUNS</span><div id="stat-total" class="stat-value">0</div><span class="stat-note">Latest loaded history</span></article>
+        <article class="stat"><span class="stat-label">PASSED</span><div id="stat-passed" class="stat-value mint">0</div><span class="stat-note">Within their validation scope</span></article>
+        <article class="stat"><span class="stat-label">NEEDS ATTENTION</span><div id="stat-attention" class="stat-value amber">0</div><span class="stat-note">Failed, errored or inconclusive</span></article>
+        <article class="stat"><span class="stat-label">IN PROGRESS</span><div id="stat-active" class="stat-value">0</div><span class="stat-note">Queued or currently running</span></article>
+      </section>
+
+      <div class="scope-notice"><span class="scope-icon" aria-hidden="true">i</span><p><strong>Scope matters.</strong> <span id="scope-notice-text">Fixture runs check evaluation logic using recorded test data. They do not execute actions or verify a Wazuh deployment.</span></p><span class="scope-tag">NO IMPLICIT LIVE CLAIMS</span></div>
+
+      <section id="workspace" class="workspace-grid" aria-label="Scenario workspace">
+        <article class="panel catalog-panel">
+          <div class="panel-header"><div><div class="eyebrow">01 / CHOOSE</div><h2>Scenario catalog <span id="scenario-count" class="count-badge">0</span></h2></div></div>
+          <div class="catalog-search"><label class="sr-only" for="scenario-search">Search scenarios</label><input id="scenario-search" type="search" placeholder="Search by name or technique…" autocomplete="off"><label class="sr-only" for="kind-filter">Scenario type</label><select id="kind-filter"><option value="all">All types</option><option value="positive">Positive</option><option value="control">Controls</option></select></div>
+          <div id="scenario-list" class="scenario-list" aria-label="Scenarios"><div class="empty-state small"><span class="empty-symbol" aria-hidden="true">⋯</span><p>Loading scenarios…</p></div></div>
+          <div class="panel-footnote">Positive tests expect a signal. Controls test explicitly defined ordinary behavior.</div>
+        </article>
+
+        <article class="panel launch-panel">
+          <div class="panel-header"><div><div class="eyebrow">02 / VALIDATE</div><h2>Configure a run</h2></div><span id="selected-kind" class="badge neutral">NO SCENARIO</span></div>
+          <div class="launch-body">
+            <div id="selected-scenario-empty" class="empty-state"><span class="empty-symbol" aria-hidden="true">↖</span><h3>Start with a scenario</h3><p>Select an item from the catalog to inspect its expectations and available execution modes.</p></div>
+            <div id="selected-scenario" hidden>
+              <div id="selected-id" class="mono selected-id"></div><h3 id="selected-title" class="selected-title"></h3><p id="selected-description" class="selected-description"></p><div id="selected-tags" class="tag-row"></div>
+              <div class="expectation-box"><div class="eyebrow">EXPECTED OUTCOME</div><div id="selected-expectation"></div><div id="selected-predicates" class="predicate-list"></div></div>
+            </div>
+            <fieldset class="mode-fieldset"><legend>Execution mode</legend><div class="mode-options">
+              <label class="mode-option"><input type="radio" name="mode" value="fixture" checked><span><strong>Fixture</strong><small>Evaluation logic</small></span></label>
+              <label class="mode-option"><input type="radio" name="mode" value="replay"><span><strong>Replay</strong><small>Wazuh rules</small></span></label>
+              <label class="mode-option"><input type="radio" name="mode" value="live"><span><strong>Live</strong><small>Action → alert</small></span></label>
+            </div></fieldset>
+            <div id="mode-description" class="mode-description">Uses the scenario’s supplied test events. No external system is contacted.</div>
+            <div class="run-controls"><span id="run-timeout" class="mono muted">TIMEOUT —</span><button id="start-run" class="button button-primary" type="button" disabled><span aria-hidden="true">▶</span> Run validation</button></div>
+          </div>
+        </article>
+      </section>
+
+      <section id="runs-section" class="panel runs-panel" aria-labelledby="runs-title">
+        <div class="panel-header"><div><div class="eyebrow">03 / INSPECT</div><h2 id="runs-title">Run history</h2></div><div class="panel-header-actions"><span id="selection-count" class="muted">0 selected</span><label class="sr-only" for="run-filter">Filter run verdict</label><select id="run-filter"><option value="all">All results</option><option value="active">In progress</option><option value="PASS">Passed</option><option value="attention">Needs attention</option></select></div></div>
+        <div class="table-scroll"><table class="run-table"><thead><tr><th class="checkbox-cell"><input id="select-all-runs" type="checkbox" aria-label="Select all visible runs"></th><th>Scenario / run</th><th>Mode</th><th>Result</th><th>Started</th><th>Duration</th><th><span class="sr-only">Inspect run</span></th></tr></thead><tbody id="run-rows"></tbody></table></div>
+        <div id="runs-empty" class="empty-state"><span class="empty-symbol" aria-hidden="true">⌁</span><h3>No runs yet</h3><p>Your validation history will appear here. Select a scenario to create the first run.</p></div>
+        <div class="panel-footnote">History shows up to 100 recent runs. A fixture PASS applies to supplied test data only.</div>
+      </section>
+
+      <section id="run-detail" class="panel detail-panel" aria-labelledby="detail-title" hidden>
+        <div class="panel-header"><div><div class="eyebrow">RUN EVIDENCE</div><h2 id="detail-title" tabindex="-1">Validation result</h2><div id="detail-id" class="mono muted detail-id"></div></div><button id="close-detail" class="button button-subtle compact" type="button" aria-label="Close run details">× Close</button></div>
+        <div class="detail-summary"><div><span id="detail-verdict" class="badge neutral">PENDING</span><span id="detail-mode" class="badge mode-badge">FIXTURE</span><p id="detail-summary-text"></p></div><div class="detail-actions"><button id="cancel-run" class="button button-danger compact" type="button" hidden>Cancel run</button><button id="download-json" class="button button-subtle compact" type="button">↓ JSON</button><button id="download-html" class="button button-subtle compact" type="button">↓ HTML</button></div></div>
+        <div id="detail-scope" class="detail-scope"></div>
+        <div class="detail-content"><div><h3 class="section-label">Observed checkpoints</h3><div id="checkpoint-list" class="checkpoint-list"></div></div><div><h3 class="section-label">Assertions</h3><div id="assertion-list" class="assertion-list"></div></div></div>
+        <div class="evidence-section"><h3 class="section-label">Evidence & execution metadata</h3><div id="evidence-list"></div><details class="evidence-item"><summary>Execution metadata</summary><pre id="detail-metadata"></pre></details></div>
+      </section>
+
+      <section id="baselines-section" class="panel baseline-panel" aria-labelledby="baseline-title">
+        <div class="panel-header"><div><div class="eyebrow">04 / COMPARE</div><h2 id="baseline-title">Regression baselines</h2></div><span id="baseline-count" class="count-badge">0 saved</span></div>
+        <div class="baseline-grid"><div><h3>Save a reference</h3><p>Select completed runs above, then preserve their results as a named baseline.</p><form id="baseline-form" class="inline-form"><label class="sr-only" for="baseline-name">New baseline name</label><input id="baseline-name" type="text" maxlength="80" placeholder="e.g. known-good-v1" autocomplete="off" required><button id="save-baseline" class="button button-subtle" type="submit">Save baseline</button></form></div><div><h3>Check for changes</h3><p>Compare selected runs against the same scenarios in a saved reference.</p><div class="inline-form"><label class="sr-only" for="baseline-select">Saved baseline</label><select id="baseline-select"><option value="">No saved baselines</option></select><button id="compare-baseline" class="button button-subtle" type="button">Compare</button></div></div></div>
+        <div id="comparison" class="comparison" aria-live="polite" hidden></div>
+      </section>
+
+      <footer class="page-footer"><span>DetectionCI <span class="footer-slash">/</span> Evidence-backed detection validation</span><span id="last-updated">Awaiting controller response</span></footer>
+    </div>
+  </main>
+</body>
+</html>

@@ -1,0 +1,75 @@
+{
+  "id": "fim-file-deleted",
+  "version": "1.0.0",
+  "title": "FIM: file deleted",
+  "description": "Verify the lab-scoped custom FIM rule for a harmless file deleted event. Live execution uses only the registered disposable VM.",
+  "kind": "positive",
+  "timeout_seconds": 45,
+  "expect": {
+    "min_alerts": 1,
+    "predicates": [
+      {
+        "field": "rule.id",
+        "op": "eq",
+        "value": "100202"
+      },
+      {
+        "field": "syscheck.event",
+        "op": "eq",
+        "value": "deleted"
+      }
+    ]
+  },
+  "fixture": {
+    "alerts": [
+      {
+        "timestamp": "2026-11-17T12:00:00.000Z",
+        "agent": {
+          "id": "001",
+          "name": "detectionci-lab"
+        },
+        "rule": {
+          "id": "100202",
+          "level": 5,
+          "description": "Synthetic fixture event; not a measured Wazuh result"
+        },
+        "syscheck": {
+          "path": "/var/lib/detectionci/watch/fixture.txt",
+          "event": "deleted"
+        }
+      }
+    ],
+    "checkpoints": [
+      {
+        "name": "action",
+        "status": "observed",
+        "detail": "Synthetic fixture checkpoint used only to test evaluation logic."
+      },
+      {
+        "name": "source",
+        "status": "observed",
+        "detail": "Synthetic fixture checkpoint used only to test evaluation logic."
+      },
+      {
+        "name": "manager",
+        "status": "observed",
+        "detail": "Synthetic fixture checkpoint used only to test evaluation logic."
+      },
+      {
+        "name": "alert",
+        "status": "observed",
+        "detail": "Synthetic fixture checkpoint used only to test evaluation logic."
+      }
+    ]
+  },
+  "metadata": {
+    "supported_modes": [
+      "fixture",
+      "live"
+    ],
+    "fixture_notice": "All embedded events and checkpoints are synthetic. Fixture PASS validates software logic only."
+  },
+  "action": {
+    "type": "file_delete"
+  }
+}

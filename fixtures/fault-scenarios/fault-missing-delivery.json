@@ -1,0 +1,51 @@
+{
+  "id": "fault-missing-delivery",
+  "version": "1.0.0",
+  "title": "Required manager checkpoint absent",
+  "description": "Deliberately non-passing fixture to exercise fail-closed reporting. This is not a live fault injection.",
+  "kind": "positive",
+  "timeout_seconds": 45,
+  "expect": {
+    "min_alerts": 1,
+    "predicates": [
+      {
+        "field": "rule.id",
+        "op": "eq",
+        "value": "100200"
+      }
+    ]
+  },
+  "fixture": {
+    "alerts": [],
+    "checkpoints": [
+      {
+        "name": "action",
+        "status": "observed",
+        "detail": "Synthetic fixture checkpoint used only to test evaluation logic."
+      },
+      {
+        "name": "source",
+        "status": "observed",
+        "detail": "Synthetic fixture checkpoint used only to test evaluation logic."
+      },
+      {
+        "name": "manager",
+        "status": "missing",
+        "detail": "Required manager checkpoint absent"
+      },
+      {
+        "name": "alert",
+        "status": "observed",
+        "detail": "Synthetic fixture checkpoint used only to test evaluation logic."
+      }
+    ],
+    "fault": "Required manager checkpoint absent"
+  },
+  "metadata": {
+    "supported_modes": [
+      "fixture"
+    ],
+    "fixture_notice": "All embedded events and checkpoints are synthetic. Fixture PASS validates software logic only."
+  },
+  "expected_verdict": "FAIL"
+}

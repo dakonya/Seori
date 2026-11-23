@@ -1,0 +1,6 @@
+<!-- Merge into the existing <syscheck> section in the lab agent's ossec.conf.
+     Do not replace the complete agent configuration with this fragment.
+     The watch directory must exist before restarting the agent. -->
+<syscheck>
+  <directories realtime="yes" check_all="yes">/var/lib/detectionci/watch</directories>
+</syscheck>

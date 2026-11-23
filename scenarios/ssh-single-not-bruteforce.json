@@ -1,0 +1,72 @@
+{
+  "id": "ssh-single-not-bruteforce",
+  "version": "1.0.0",
+  "title": "Control: one failure is not a burst",
+  "description": "One invalid-user event must not satisfy the burst rule 5712 in an isolated logtest session.",
+  "kind": "control",
+  "timeout_seconds": 45,
+  "expect": {
+    "min_alerts": 0,
+    "predicates": [
+      {
+        "field": "rule.id",
+        "op": "eq",
+        "value": "5712"
+      }
+    ],
+    "max_alerts": 0
+  },
+  "fixture": {
+    "alerts": [
+      {
+        "timestamp": "2026-11-17T12:00:00.000Z",
+        "agent": {
+          "id": "001",
+          "name": "detectionci-lab"
+        },
+        "rule": {
+          "id": "5710",
+          "level": 5,
+          "description": "Synthetic fixture event; not a measured Wazuh result"
+        },
+        "data": {
+          "srcip": "192.0.2.25",
+          "srcport": "48928",
+          "srcuser": "dci_fixture"
+        }
+      }
+    ],
+    "checkpoints": [
+      {
+        "name": "action",
+        "status": "observed",
+        "detail": "Synthetic fixture checkpoint used only to test evaluation logic."
+      },
+      {
+        "name": "source",
+        "status": "observed",
+        "detail": "Synthetic fixture checkpoint used only to test evaluation logic."
+      },
+      {
+        "name": "manager",
+        "status": "observed",
+        "detail": "Synthetic fixture checkpoint used only to test evaluation logic."
+      },
+      {
+        "name": "alert",
+        "status": "observed",
+        "detail": "Synthetic fixture checkpoint used only to test evaluation logic."
+      }
+    ]
+  },
+  "metadata": {
+    "supported_modes": [
+      "fixture",
+      "replay"
+    ],
+    "fixture_notice": "All embedded events and checkpoints are synthetic. Fixture PASS validates software logic only."
+  },
+  "replay": [
+    "Nov 17 12:00:00 detectionci-lab sshd[29205]: Invalid user dci_fixture from 192.0.2.25 port 48928"
+  ]
+}

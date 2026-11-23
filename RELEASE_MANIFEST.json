@@ -1,0 +1,232 @@
+{
+  "name": "DetectionCI",
+  "version": "0.1.0",
+  "source_files": 56,
+  "verification": "docs/verification-results.json",
+  "files": [
+    {
+      "path": ".github/workflows/ci.yml",
+      "sha256": "51ba46b8dcd0369f79daa751f189911d31beb51191c6eb86f889fdebd851df67"
+    },
+    {
+      "path": ".gitignore",
+      "sha256": "314a80a5a6d8a850714ef26af7eca5ff11aa08241fb508469dec320072cb95cd"
+    },
+    {
+      "path": "LICENSE",
+      "sha256": "606004f5a3be6f939f4f7aab86e8f77b23d486c85f5035594dd2acec0d42b3c9"
+    },
+    {
+      "path": "README.md",
+      "sha256": "a1bfafaf6710dc02195c15028b4be0226ee716f9abad87d68498a4495a32625a"
+    },
+    {
+      "path": "START_HERE_RU.md",
+      "sha256": "d14272e2a3524f59352c670d940d964a2cc826aceabf2535627bd5bd9c4e3f04"
+    },
+    {
+      "path": "detectionci/__init__.py",
+      "sha256": "2b66049d8ef3d3b5bf7d7aefda9835e2ae81adcac67cc9375674d171a91a7ae7"
+    },
+    {
+      "path": "detectionci/__main__.py",
+      "sha256": "935a1c1166b0c1ea35a82256345000bf2c73ded718d77773bc27a71ecce28f7d"
+    },
+    {
+      "path": "detectionci/catalog.py",
+      "sha256": "510b99afeb02c3cc62adb181082d46e8a614e53cbfd9b961804fbe56666dac39"
+    },
+    {
+      "path": "detectionci/cli.py",
+      "sha256": "b35a368998524bfa95128018637dc1d473079c564022ecba1ac7699dc436bc33"
+    },
+    {
+      "path": "detectionci/config.py",
+      "sha256": "f728221a637ead8fd53eb06543cb1795a2f2a2efec7151c3ea6f848ec9dad830"
+    },
+    {
+      "path": "detectionci/engine.py",
+      "sha256": "852fd11853e10682f91c5bfae55acd2e24e2318760896b30a268633cf8be7619"
+    },
+    {
+      "path": "detectionci/models.py",
+      "sha256": "784d3a2a0db8612d4a276e4a3b3c4ae26960af566617f28e93fac8d6c83ef89b"
+    },
+    {
+      "path": "detectionci/reporting.py",
+      "sha256": "eac3fbddf13bba2f8c64ff6e61bdd4c8f6fa850128cd9fe08470f03a0a334064"
+    },
+    {
+      "path": "detectionci/server.py",
+      "sha256": "dbc97b368c347b0e417fdb292e04cd634425f7cdbfe3d1ba20c3105517079c49"
+    },
+    {
+      "path": "detectionci/static/app.js",
+      "sha256": "f2147090f2534ab290e19ec03f67ee2a7ecb7e84f9abdf30921b2d65b29eea71"
+    },
+    {
+      "path": "detectionci/static/index.html",
+      "sha256": "708a0b68c9c0cde57be5a3eba61b98f5bee2997a25551979bf6db69f565422bd"
+    },
+    {
+      "path": "detectionci/static/style.css",
+      "sha256": "297f18edef768f47e891d0ac98c2e49acfdcccedc0995666761cf5f6a0528368"
+    },
+    {
+      "path": "detectionci/store.py",
+      "sha256": "ff7d4e85d92349af6e5a3d8e465034d54d164645d513a9e058c182b342d129fb"
+    },
+    {
+      "path": "detectionci/wazuh.py",
+      "sha256": "cfe3d6967c21d6796c424b1485d7133654703601f48a30d4ada75d68bdcb92f7"
+    },
+    {
+      "path": "detectionci/worker.py",
+      "sha256": "45ed5f80d06601a343b6b248e382cf1e84bab48c465277f4ac51f36eda2375e9"
+    },
+    {
+      "path": "docs/architecture.md",
+      "sha256": "c2029a7771a5cba38a1932d294fcfe3bd48dfcaada932cf4aef2b50646fa22c2"
+    },
+    {
+      "path": "docs/release-notes.md",
+      "sha256": "18e9a5746f00d3bcbf770c6c771166f4a7ca44e65891962ff65e508c331d978e"
+    },
+    {
+      "path": "docs/scenarios.md",
+      "sha256": "1cc21498020b6dedd4d8729a6017276f9f7adb617ab1f627af7de033d32b4058"
+    },
+    {
+      "path": "docs/threat-model.md",
+      "sha256": "f9a63baf5bf73b82cfcfb4f9f48f152809c457a0254cf045172b3b95fa143e0c"
+    },
+    {
+      "path": "docs/verification-results.json",
+      "sha256": "e2dbf4be2229ae1cce40a5c8cfee270b32d43ced87cc1df7b0a63d5ed9cc1d3c"
+    },
+    {
+      "path": "docs/verification.md",
+      "sha256": "2d7c8b194d36013e216617124b8489d1f37a77e59c310aa81d4e80b13af4697e"
+    },
+    {
+      "path": "examples/fixture-fim-created.html",
+      "sha256": "7ffd6df47dbb8745f424c7e94a3ae2ae153071bd349ba60a1a14a25d060252a7"
+    },
+    {
+      "path": "examples/fixture-fim-created.json",
+      "sha256": "014b3bc8bd922865b9d8dd99f342b39193fde82ffe5e6df75f5a92886cf39104"
+    },
+    {
+      "path": "fixtures/fault-scenarios/fault-control-false-alert.json",
+      "sha256": "cf4c013a7fbd1e45cc72daabfc89d99873e7243b3dea99c54f41211ac0cc3cf9"
+    },
+    {
+      "path": "fixtures/fault-scenarios/fault-missing-alert.json",
+      "sha256": "963d03c53dff9f7f43992c334ade675f0b849777d79ad41517fa642c6fbbf0ab"
+    },
+    {
+      "path": "fixtures/fault-scenarios/fault-missing-delivery.json",
+      "sha256": "d19002ae920fd13d0d7681387f4d992142f7cc0a61637b0e78189ca486c19e67"
+    },
+    {
+      "path": "fixtures/fault-scenarios/fault-unobservable-source.json",
+      "sha256": "2b2727b24592b8edd81189f838b25c1b98613d395737f977289960b56929dab7"
+    },
+    {
+      "path": "lab/README.md",
+      "sha256": "5aa3898031dff9d73bf38f9a719d30cf262ff83b4a23deffa293560c9be8fbfe"
+    },
+    {
+      "path": "lab/agent-syscheck-fragment.xml",
+      "sha256": "abd6a05a7a87cf4c36222a64dcaf338c52959c2811e58599c11097ae8dedaab8"
+    },
+    {
+      "path": "lab/config.example.json",
+      "sha256": "b0719ec70c4d7e10cd0476660afad9ba974842615a6d116aa2c2aa4d74195f3a"
+    },
+    {
+      "path": "lab/detectionci_fim.xml",
+      "sha256": "1f79e093d87e90167e64587e91ab4b49ddd9410739406bcd581784ea15885f95"
+    },
+    {
+      "path": "lab/prepare_wazuh.py",
+      "sha256": "2999ee8697effdfba8e7a265e4b5c077e7e0347a71af93cd592af46821394131"
+    },
+    {
+      "path": "pyproject.toml",
+      "sha256": "9c9db58c78f7afbe8f402fffba02a2d1762e4983c30250643e73c5e16d3af4e5"
+    },
+    {
+      "path": "scenarios/agent-isolation-control.json",
+      "sha256": "552631781a0c10015a6e91c0bcde0a4460ce404dc0e2030bfc4e5b3877853022"
+    },
+    {
+      "path": "scenarios/alert-batch-count.json",
+      "sha256": "8e018d7363eaf8e45cd6e6d21928347f506e868e1070cffd2558385dfe40dbd5"
+    },
+    {
+      "path": "scenarios/fim-file-created.json",
+      "sha256": "e07015970efaf84d367ca8a9f7e46cc2030acc6a6616b972b3d76a4965eaf13c"
+    },
+    {
+      "path": "scenarios/fim-file-deleted.json",
+      "sha256": "d82c7f076eb03ad387cb242eaa2da0d231282c7e20c9cf4e417edfae83d13e87"
+    },
+    {
+      "path": "scenarios/fim-file-modified.json",
+      "sha256": "61f714b19b861b6d8a53a950c0ce81b8b93cc4bcd63fd4c572267722344cb90f"
+    },
+    {
+      "path": "scenarios/fim-modification-not-creation.json",
+      "sha256": "1886611d344066c0ce9fe89387de28dbbab6880051a49deb244ec4a0019968e3"
+    },
+    {
+      "path": "scenarios/fim-unwatched-path-control.json",
+      "sha256": "477a89236aa4a2975decf42dea33c83ea5579b40ffd10d280b43603fbcd3c35a"
+    },
+    {
+      "path": "scenarios/mixed-alert-correlation.json",
+      "sha256": "77b6fc8290e910ad6deabed4a815e66c8daed5ff9497668eb035fb051dbaf756"
+    },
+    {
+      "path": "scenarios/path-isolation-control.json",
+      "sha256": "dd22c96f73ae0017bf7ef7e6d17e3ef1056b666ed2377e18ca1ac66334875f56"
+    },
+    {
+      "path": "scenarios/ssh-invalid-user.json",
+      "sha256": "d3bbbf368c3ead62682199a7b3e14ec32ccfde55e50efc350f502993fef5dfe4"
+    },
+    {
+      "path": "scenarios/ssh-single-not-bruteforce.json",
+      "sha256": "36961916372dd6d96b0e11619f0f00640ee4c9d11ca11e6b08ddfe78cb583e8b"
+    },
+    {
+      "path": "scenarios/ssh-success-control.json",
+      "sha256": "3331996782b185276238ce7a862ca705d1b9cc0089f236653d77c31daefcc1cc"
+    },
+    {
+      "path": "tests/test_application.py",
+      "sha256": "6d5598a8ac7cbd2104a934ab4a4eae1441625f290ccba28b7afe8385d7ca8461"
+    },
+    {
+      "path": "tests/test_engine.py",
+      "sha256": "83735a5e3a96455f8a8503210fb1512992105acc10ad06fc3167cb090a60f1a6"
+    },
+    {
+      "path": "tests/test_integration_contracts.py",
+      "sha256": "a3b0989edec83c2c2bbd5ff1c76733d3607b8df7090e5571a305a492deb1498f"
+    },
+    {
+      "path": "tests/test_models.py",
+      "sha256": "11b878109aab50964e3adb625c61ac5c915010bb0e6155d9a7452d2aa8e8841c"
+    },
+    {
+      "path": "tests/test_store.py",
+      "sha256": "80b2b7f22405c483e7dfee53e0a0e7abc4346314138797affd7b814f7e76ec6f"
+    },
+    {
+      "path": "tests/test_wazuh.py",
+      "sha256": "bbc562e641809f6397f909f1cca8b1d5ad2e1c22e978eae08d2b21fc1c0bcb36"
+    }
+  ]
+}

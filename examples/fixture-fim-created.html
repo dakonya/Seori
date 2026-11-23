@@ -1,0 +1,199 @@
+<!doctype html><html lang='en'><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'><meta http-equiv='Content-Security-Policy' content="default-src 'none'; style-src 'unsafe-inline'; base-uri 'none'"><title>DetectionCI report</title><style>body{font:15px system-ui,sans-serif;max-width:1000px;margin:40px auto;padding:0 24px;color:#172333;background:#f5f7fa}h1{letter-spacing:-1px}table{width:100%;border-collapse:collapse;background:white;margin:16px 0}td,th{text-align:left;padding:10px;border:1px solid #dce1e8}pre{white-space:pre-wrap;overflow-wrap:anywhere;background:#e8edf3;padding:16px;border-radius:8px}small{color:#536174}.notice{border-left:4px solid #ae7100;padding:14px;background:#fff4d9}</style><h1>DetectionCI · validation report</h1><p><strong>fim-file-created</strong> · fixture · <strong>PASS</strong></p><p class='notice'>Fixture validates local logic; replay validates Wazuh rules on supplied logs; live validates only observed stages. Redaction is best effort; review before sharing.</p><p>fim-file-created: PASS; 1 matching alerts</p><small>Run e79c1c1a-f6d4-4125-a64a-ed23eb9fa117 · created 2026-11-17T13:40:24.690Z</small><h2>Checkpoints</h2><table><tr><th>name</th><th>status</th><th>detail</th></tr><tr><td>action</td><td>observed</td><td>Synthetic fixture checkpoint used only to test evaluation logic.</td></tr><tr><td>source</td><td>observed</td><td>Synthetic fixture checkpoint used only to test evaluation logic.</td></tr><tr><td>manager</td><td>observed</td><td>Synthetic fixture checkpoint used only to test evaluation logic.</td></tr><tr><td>alert</td><td>observed</td><td>Synthetic fixture checkpoint used only to test evaluation logic.</td></tr></table><h2>Assertions</h2><table><tr><th>id</th><th>verdict</th><th>message</th></tr><tr><td>matching-alert-count</td><td>PASS</td><td>1 matching alerts among 1 observed alerts</td></tr><tr><td>checkpoint-action</td><td>PASS</td><td>Synthetic fixture checkpoint used only to test evaluation logic.</td></tr><tr><td>checkpoint-source</td><td>PASS</td><td>Synthetic fixture checkpoint used only to test evaluation logic.</td></tr><tr><td>checkpoint-manager</td><td>PASS</td><td>Synthetic fixture checkpoint used only to test evaluation logic.</td></tr><tr><td>checkpoint-alert</td><td>PASS</td><td>Synthetic fixture checkpoint used only to test evaluation logic.</td></tr></table><h2>Evidence and metadata</h2><pre>{
+  &quot;report_schema&quot;: &quot;detectionci.run.v1&quot;,
+  &quot;tool_version&quot;: &quot;0.1.0&quot;,
+  &quot;run&quot;: {
+    &quot;id&quot;: &quot;e79c1c1a-f6d4-4125-a64a-ed23eb9fa117&quot;,
+    &quot;scenario_id&quot;: &quot;fim-file-created&quot;,
+    &quot;scenario_version&quot;: &quot;1.0.0&quot;,
+    &quot;scenario&quot;: {
+      &quot;action&quot;: {
+        &quot;type&quot;: &quot;file_create&quot;
+      },
+      &quot;description&quot;: &quot;Verify the lab-scoped custom FIM rule for a harmless file added event. Live execution uses only the registered disposable VM.&quot;,
+      &quot;expect&quot;: {
+        &quot;min_alerts&quot;: 1,
+        &quot;predicates&quot;: [
+          {
+            &quot;field&quot;: &quot;rule.id&quot;,
+            &quot;op&quot;: &quot;eq&quot;,
+            &quot;value&quot;: &quot;100200&quot;
+          },
+          {
+            &quot;field&quot;: &quot;syscheck.event&quot;,
+            &quot;op&quot;: &quot;eq&quot;,
+            &quot;value&quot;: &quot;added&quot;
+          }
+        ]
+      },
+      &quot;fixture&quot;: {
+        &quot;alerts&quot;: [
+          {
+            &quot;agent&quot;: {
+              &quot;id&quot;: &quot;001&quot;,
+              &quot;name&quot;: &quot;detectionci-lab&quot;
+            },
+            &quot;rule&quot;: {
+              &quot;description&quot;: &quot;Synthetic fixture event; not a measured Wazuh result&quot;,
+              &quot;id&quot;: &quot;100200&quot;,
+              &quot;level&quot;: 5
+            },
+            &quot;syscheck&quot;: {
+              &quot;event&quot;: &quot;added&quot;,
+              &quot;path&quot;: &quot;/var/lib/detectionci/watch/fixture.txt&quot;
+            },
+            &quot;timestamp&quot;: &quot;2026-11-17T12:00:00.000Z&quot;
+          }
+        ],
+        &quot;checkpoints&quot;: [
+          {
+            &quot;detail&quot;: &quot;Synthetic fixture checkpoint used only to test evaluation logic.&quot;,
+            &quot;name&quot;: &quot;action&quot;,
+            &quot;status&quot;: &quot;observed&quot;
+          },
+          {
+            &quot;detail&quot;: &quot;Synthetic fixture checkpoint used only to test evaluation logic.&quot;,
+            &quot;name&quot;: &quot;source&quot;,
+            &quot;status&quot;: &quot;observed&quot;
+          },
+          {
+            &quot;detail&quot;: &quot;Synthetic fixture checkpoint used only to test evaluation logic.&quot;,
+            &quot;name&quot;: &quot;manager&quot;,
+            &quot;status&quot;: &quot;observed&quot;
+          },
+          {
+            &quot;detail&quot;: &quot;Synthetic fixture checkpoint used only to test evaluation logic.&quot;,
+            &quot;name&quot;: &quot;alert&quot;,
+            &quot;status&quot;: &quot;observed&quot;
+          }
+        ]
+      },
+      &quot;id&quot;: &quot;fim-file-created&quot;,
+      &quot;kind&quot;: &quot;positive&quot;,
+      &quot;metadata&quot;: {
+        &quot;fixture_notice&quot;: &quot;All embedded events and checkpoints are synthetic. Fixture PASS validates software logic only.&quot;,
+        &quot;supported_modes&quot;: [
+          &quot;fixture&quot;,
+          &quot;live&quot;
+        ]
+      },
+      &quot;timeout_seconds&quot;: 45,
+      &quot;title&quot;: &quot;FIM: file added&quot;,
+      &quot;version&quot;: &quot;1.0.0&quot;
+    },
+    &quot;mode&quot;: &quot;fixture&quot;,
+    &quot;status&quot;: &quot;completed&quot;,
+    &quot;verdict&quot;: &quot;PASS&quot;,
+    &quot;result&quot;: {
+      &quot;assertions&quot;: [
+        {
+          &quot;actual&quot;: 1,
+          &quot;expected&quot;: {
+            &quot;max_alerts&quot;: null,
+            &quot;min_alerts&quot;: 1
+          },
+          &quot;id&quot;: &quot;matching-alert-count&quot;,
+          &quot;message&quot;: &quot;1 matching alerts among 1 observed alerts&quot;,
+          &quot;verdict&quot;: &quot;PASS&quot;
+        },
+        {
+          &quot;actual&quot;: &quot;observed&quot;,
+          &quot;expected&quot;: &quot;observed&quot;,
+          &quot;id&quot;: &quot;checkpoint-action&quot;,
+          &quot;message&quot;: &quot;Synthetic fixture checkpoint used only to test evaluation logic.&quot;,
+          &quot;verdict&quot;: &quot;PASS&quot;
+        },
+        {
+          &quot;actual&quot;: &quot;observed&quot;,
+          &quot;expected&quot;: &quot;observed&quot;,
+          &quot;id&quot;: &quot;checkpoint-source&quot;,
+          &quot;message&quot;: &quot;Synthetic fixture checkpoint used only to test evaluation logic.&quot;,
+          &quot;verdict&quot;: &quot;PASS&quot;
+        },
+        {
+          &quot;actual&quot;: &quot;observed&quot;,
+          &quot;expected&quot;: &quot;observed&quot;,
+          &quot;id&quot;: &quot;checkpoint-manager&quot;,
+          &quot;message&quot;: &quot;Synthetic fixture checkpoint used only to test evaluation logic.&quot;,
+          &quot;verdict&quot;: &quot;PASS&quot;
+        },
+        {
+          &quot;actual&quot;: &quot;observed&quot;,
+          &quot;expected&quot;: &quot;observed&quot;,
+          &quot;id&quot;: &quot;checkpoint-alert&quot;,
+          &quot;message&quot;: &quot;Synthetic fixture checkpoint used only to test evaluation logic.&quot;,
+          &quot;verdict&quot;: &quot;PASS&quot;
+        }
+      ],
+      &quot;checkpoints&quot;: [
+        {
+          &quot;detail&quot;: &quot;Synthetic fixture checkpoint used only to test evaluation logic.&quot;,
+          &quot;name&quot;: &quot;action&quot;,
+          &quot;status&quot;: &quot;observed&quot;
+        },
+        {
+          &quot;detail&quot;: &quot;Synthetic fixture checkpoint used only to test evaluation logic.&quot;,
+          &quot;name&quot;: &quot;source&quot;,
+          &quot;status&quot;: &quot;observed&quot;
+        },
+        {
+          &quot;detail&quot;: &quot;Synthetic fixture checkpoint used only to test evaluation logic.&quot;,
+          &quot;name&quot;: &quot;manager&quot;,
+          &quot;status&quot;: &quot;observed&quot;
+        },
+        {
+          &quot;detail&quot;: &quot;Synthetic fixture checkpoint used only to test evaluation logic.&quot;,
+          &quot;name&quot;: &quot;alert&quot;,
+          &quot;status&quot;: &quot;observed&quot;
+        }
+      ],
+      &quot;evidence&quot;: [
+        {
+          &quot;data&quot;: {
+            &quot;agent&quot;: {
+              &quot;id&quot;: &quot;001&quot;,
+              &quot;name&quot;: &quot;detectionci-lab&quot;
+            },
+            &quot;rule&quot;: {
+              &quot;description&quot;: &quot;Synthetic fixture event; not a measured Wazuh result&quot;,
+              &quot;id&quot;: &quot;100200&quot;,
+              &quot;level&quot;: 5
+            },
+            &quot;syscheck&quot;: {
+              &quot;event&quot;: &quot;added&quot;,
+              &quot;path&quot;: &quot;/var/lib/detectionci/watch/fixture.txt&quot;
+            },
+            &quot;timestamp&quot;: &quot;2026-11-17T12:00:00.000Z&quot;
+          },
+          &quot;hash_scope&quot;: &quot;stored redacted evidence data&quot;,
+          &quot;id&quot;: &quot;alert-1&quot;,
+          &quot;kind&quot;: &quot;alert&quot;,
+          &quot;sha256&quot;: &quot;2101e261d83b420babbbef2588fd1180e6ef97787370e1bc065bfda55852bd0d&quot;
+        }
+      ],
+      &quot;metadata&quot;: {
+        &quot;config_attestation&quot;: &quot;Operator configuration hash; not an attestation of loaded SIEM rules.&quot;,
+        &quot;duration_seconds&quot;: 0.0008,
+        &quot;engine_version&quot;: &quot;0.1.0&quot;,
+        &quot;evidence_hash_scope&quot;: &quot;SHA-256 of exported, redacted evidence data&quot;,
+        &quot;external_systems_contacted&quot;: false,
+        &quot;finished_at&quot;: &quot;2026-11-17T13:40:24.800Z&quot;,
+        &quot;fixture_fault&quot;: null,
+        &quot;fixture_only&quot;: true,
+        &quot;matched_alerts&quot;: 1,
+        &quot;mode&quot;: &quot;fixture&quot;,
+        &quot;operator_config_sha256&quot;: &quot;44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a&quot;,
+        &quot;scenario_sha256&quot;: &quot;5478fa83e151b2243a4e45ce3fa9c66dfc2c40785e4f96f0ecf65b072bb700eb&quot;,
+        &quot;total_alerts&quot;: 1,
+        &quot;validation_scope&quot;: &quot;fixture_logic&quot;
+      },
+      &quot;summary&quot;: &quot;fim-file-created: PASS; 1 matching alerts&quot;,
+      &quot;verdict&quot;: &quot;PASS&quot;
+    },
+    &quot;created_at&quot;: &quot;2026-11-17T13:40:24.690Z&quot;,
+    &quot;started_at&quot;: &quot;2026-11-17T13:40:24.799Z&quot;,
+    &quot;finished_at&quot;: &quot;2026-11-17T13:40:24.801Z&quot;,
+    &quot;cancel_requested&quot;: false,
+    &quot;suite_id&quot;: &quot;553c30d5-36de-4421-a9d5-ecca1632512d&quot;
+  },
+  &quot;notice&quot;: &quot;Fixture validates local logic; replay validates Wazuh rules on supplied logs; live validates only observed stages. Redaction is best effort; review before sharing.&quot;
+}</pre></html>
