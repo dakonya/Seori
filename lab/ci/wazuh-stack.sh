@@ -39,10 +39,12 @@ wait_for() {
 }
 
 indexer_request() {
+    local path=$1
+    shift
     curl --silent --fail --max-time 8 --noproxy '*' \
         --cacert "$DCI_WAZUH_CA_FILE" \
         --user "$DCI_WAZUH_INDEXER_USERNAME:$DCI_WAZUH_INDEXER_PASSWORD" \
-        "$DCI_WAZUH_INDEXER_URL$1"
+        "$@" "$DCI_WAZUH_INDEXER_URL$path"
 }
 
 indexer_ready() {
@@ -81,6 +83,9 @@ case "$command" in
         fi
         mkdir -p -- "$run_dir"
         python3 "$script_dir/../prepare_wazuh.py" --fetch --destination "$run_dir/wazuh-docker"
+        # The image copies this public file into the rules directory as root.
+        # Analysisd loads rules after dropping privileges to the wazuh user.
+        chmod 0644 "$single_node/config/detectionci_fim.xml"
 
         indexer_password=$(openssl rand -hex 24)
         api_password="Aa1!$(openssl rand -hex 16)"
@@ -90,7 +95,7 @@ case "$command" in
             printf 'DCI_WAZUH_INDEXER_USERNAME=admin\n'
             printf 'DCI_WAZUH_INDEXER_PASSWORD=%q\n' "$indexer_password"
             printf 'DCI_WAZUH_API_PASSWORD=%q\n' "$api_password"
-            printf 'DCI_WAZUH_CA_FILE=%q\n' "$single_node/config/wazuh_indexer_ssl_certs/root-ca.pem"
+            printf 'DCI_WAZUH_CA_FILE=%q\n' "$run_dir/indexer-ca.pem"
         } > "$credentials"
         load_credentials
 
@@ -126,7 +131,11 @@ EOF
         echo 'Generating ephemeral Wazuh certificates.'
         docker compose --project-name detectionci-live \
             -f "$single_node/generate-indexer-certs.yml" run --rm -T generator
-        sudo chmod 0644 "$DCI_WAZUH_CA_FILE"
+        # The generator makes its root-owned output directory non-traversable.
+        # Copy the public CA only; leave all certificate keys in that directory.
+        sudo install -o "$(id -u)" -m 0644 \
+            "$single_node/config/wazuh_indexer_ssl_certs/root-ca.pem" "$DCI_WAZUH_CA_FILE"
+        test -r "$DCI_WAZUH_CA_FILE"
 
         echo 'Starting Wazuh Indexer.'
         compose up -d wazuh.indexer
@@ -152,6 +161,8 @@ EOF
         [[ -f "$credentials" && -f "$single_node/docker-compose.yml" ]] || exit 0
         load_credentials
         compose ps -a || true
+        indexer_request '/_cluster/health' --show-error --output /dev/null \
+            --write-out 'Indexer health HTTP status: %{http_code}\n' || true
         containers=$(compose ps -aq wazuh.manager wazuh.indexer)
         if [[ -n "$containers" ]]; then
             while IFS= read -r container; do
@@ -163,7 +174,7 @@ EOF
             filebeat_output
         } 2>&1 |
             sed -e "s/$DCI_WAZUH_INDEXER_PASSWORD/[REDACTED]/g" -e "s/$DCI_WAZUH_API_PASSWORD/[REDACTED]/g" |
-            grep -iE 'error|fatal|exception|no space|disk watermark|failed|connection refused|not running' || true
+            grep -iE 'error|fatal|exception|no space|disk watermark|failed|connection refused|not running|publish_address|OpenSearch Security.*initialized' || true
         ;;
     down)
         [[ -f "$credentials" && -f "$single_node/docker-compose.yml" ]] || exit 0

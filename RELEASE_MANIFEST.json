@@ -171,7 +171,7 @@
     },
     {
       "path": "lab/ci/wazuh-stack.sh",
-      "sha256": "f0341d12e2b2f63037c970cd952df9c416bbac0c377dd0715d31bf43124dbbdd"
+      "sha256": "8b4b7a92b90c493c422d3e385fcccf7b1702ac73618508544cd47dd040f66c53"
     },
     {
       "path": "lab/config.example.json",
