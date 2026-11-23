@@ -2,7 +2,9 @@
 
 ## Wazuh integration status
 
-All three SSH replay scenarios passed on Wazuh Manager **4.14.10-1** with pre-recorded log lines. The reports record the manager's logtest results and the assertions applied to them. During public release preparation on 23 November 2026, `bash lab/detectionci-replay.sh --suite` reproduced all three PASS verdicts on the same manager version. Live verification with a Wazuh agent and indexer remains pending. [Replay command and JSON reports](../README.md#replay-ssh-logs-on-linux)
+All three SSH replay scenarios passed on Wazuh Manager **4.14.10-1** with pre-recorded log lines. The reports record the manager's logtest results and the assertions applied to them. During public release preparation on 23 November 2026, `bash lab/detectionci-replay.sh --suite` reproduced all three PASS verdicts on the same manager version. [Replay command and JSON reports](../README.md#replay-ssh-logs-on-linux)
+
+The **Live FIM smoke test** workflow passed `fim-file-created` in one manually dispatched run. The Wazuh agent monitored the standard `ubuntu-24.04` runner VM, with Wazuh Manager and Indexer **4.14.10** in containers on that runner. DetectionCI matched an indexed alert for rule `100200` with `syscheck.event=added`, the registered agent ID and the unique file path. The workflow also confirmed removal of that file. The run includes disk-space measurements and the `live-fim-report` JSON and HTML artifact. Live modification and deletion scenarios remain unverified. [Passing workflow run](https://github.com/dakonya/DetectionCI/actions/runs/45172139322)
 
 ## Initial build verification
 

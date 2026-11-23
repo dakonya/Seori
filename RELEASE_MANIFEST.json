@@ -23,11 +23,11 @@
     },
     {
       "path": "README.md",
-      "sha256": "f07de0f99953a1760da61708c42635e95bfdd90c4a59fea1cf3f0c2714d5919f"
+      "sha256": "8ec2fd8676703c459e1f16493a4de3312dc485782260fce06f73e8984849e328"
     },
     {
       "path": "START_HERE_RU.md",
-      "sha256": "6a9fd1818ec6de79c096bbad3cf1b05e24ed60f0b6d304acffb88fae1bcbd552"
+      "sha256": "d6de97526d44e81eb149454928224f7fe9313d2bbe3ea3bf278e08f7c931561b"
     },
     {
       "path": "detectionci/__init__.py",
@@ -95,7 +95,7 @@
     },
     {
       "path": "docs/release-notes.md",
-      "sha256": "ea37e4b3bae043e15250cf33032b75cfc26040bc669cb0cfcff75b2f58fa85f2"
+      "sha256": "2afd73916baf4472f41e12c1ca04fef07120eca0b9ae9a692cd6738f3e3019c7"
     },
     {
       "path": "docs/scenarios.md",
@@ -111,7 +111,7 @@
     },
     {
       "path": "docs/verification.md",
-      "sha256": "99e33f523545402fe5cce12ac5958722cf2e67dc4a9405a8939fa1b822166c37"
+      "sha256": "09784b03227798f00130cde85364c24cf7480dc442930d9ce38ec96c763a3492"
     },
     {
       "path": "examples/fixture-fim-created.html",
@@ -151,7 +151,7 @@
     },
     {
       "path": "lab/README.md",
-      "sha256": "10aea954d6486114c81870e33a994a37a260135c4988fcc719dc14cdc5913f9e"
+      "sha256": "bd758ced2c4f656cc860be184d5f066c0c2c4e137057e127709ef844abeb8417"
     },
     {
       "path": "lab/agent-syscheck-fragment.xml",

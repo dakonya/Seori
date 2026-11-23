@@ -2,7 +2,7 @@
 
 DetectionCI checks for detection regressions after a rule or configuration change. It runs scenarios with explicit alert expectations and exports the verdict, observed alerts and evidence hashes in JSON and HTML reports.
 
-The three SSH replay scenarios passed on Wazuh Manager **4.14.10-1** using pre-recorded log lines. Replay verifies Wazuh's decoders and rules for those inputs. End-to-end live verification with a Wazuh agent is pending.
+The three SSH replay scenarios passed on Wazuh Manager **4.14.10-1** using pre-recorded logs. The first Live run also passed `fim-file-created` with a real Wazuh agent and Indexer on GitHub Actions. [Passing Live run and reports](https://github.com/dakonya/DetectionCI/actions/runs/45172139322)
 
 ## Replay SSH logs on Linux
 
@@ -21,6 +21,12 @@ The first build downloads the Ubuntu base image and Wazuh packages. `bash lab/de
 | [ssh-success-control](examples/replay/ssh-success-control.json) | Zero matches for `5710` after a successful login | `5715` | PASS |
 
 Each control counts matches for its specified rule. Wazuh returned one alert in each control, with a different rule ID from the one under test. The matching count was zero in both controls, so both passed.
+
+## Live FIM on GitHub Actions
+
+Open **Live FIM smoke test** in Actions and choose **Run workflow**. The standard `ubuntu-24.04` runner hosts Wazuh Agent and runs Wazuh Manager and Indexer **4.14.10** in containers. [Manual workflow](https://github.com/dakonya/DetectionCI/actions/workflows/live-fim.yml)
+
+DetectionCI found indexed rule `100200` with `syscheck.event=added`, the registered agent ID and the unique run path. The workflow also confirmed the file was removed. Download the JSON and HTML from the `live-fim-report` artifact. [Run artifact](https://github.com/dakonya/DetectionCI/actions/runs/45172139322/artifacts/14817052716)
 
 ## Run locally
 
@@ -72,7 +78,7 @@ Four intentionally non-passing fixture scenarios live in `fixtures/fault-scenari
 
 ## Wazuh lab
 
-For live tests, prepare a separate Linux VM with a Wazuh agent, Python 3 and OpenSSH access with a verified host key. The controller needs access to the Wazuh APIs with trusted TLS certificates. The lab guide covers the pinned `wazuh-docker` release `v4.14.10`, custom FIM rules, agent setup and commands for the configured lab. [Wazuh lab guide](lab/README.md)
+For a local live lab, prepare a separate Linux VM with a Wazuh agent, Python 3 and OpenSSH access with a verified host key. The controller needs access to the Wazuh APIs with trusted TLS certificates. The lab guide covers the pinned `wazuh-docker` release `v4.14.10`, custom FIM rules, agent setup and commands for the configured lab. [Wazuh lab guide](lab/README.md)
 
 ## Verification and trust
 
@@ -84,9 +90,9 @@ python3 -m detectionci verify-fixtures
 python3 -m detectionci suite --mode fixture --output artifacts/fixture-suite
 ```
 
-The repository includes transport-level tests using controlled responses. The initial build environment lacked Docker, a Wazuh service and VM acceleration. The verification guide records those initial checks, the later manager replay and the remaining live acceptance experiments. [Verification guide](docs/verification.md)
+The repository includes transport-level tests using controlled responses. The verification guide records the initial build checks, the manager replay, the Actions Live run and the remaining lab experiments. [Verification guide](docs/verification.md)
 
-Only PASS is a successful required CI check. FAIL, ERROR, INCONCLUSIVE and CANCELLED must not become a green security gate. CI in this repository runs software and fixture checks without Wazuh credentials. It does not expose a privileged live runner to pull requests.
+Only PASS is a successful required CI check. FAIL, ERROR, INCONCLUSIVE and CANCELLED must not become a green security gate. The default CI workflow runs software and fixture checks without Wazuh credentials. The separate Live workflow starts by manual dispatch.
 
 ## Design and limits
 

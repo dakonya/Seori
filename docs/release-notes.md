@@ -14,7 +14,9 @@ The initial build recorded 147 successful automated tests, five skipped socket t
 
 ## Integration boundary
 
-The initial build environment did not run Wazuh integration. In a later run, all three SSH scenarios passed on Wazuh Manager **4.14.10-1** using pre-recorded log lines. Live verification from the endpoint agent through the indexer remains pending, along with browser rendering and an independent installation. [Replay results and reports](../README.md#replay-ssh-logs-on-linux)
+The initial build environment did not run Wazuh integration. All three SSH scenarios later passed on Wazuh Manager **4.14.10-1** using pre-recorded log lines. [Replay results and reports](../README.md#replay-ssh-logs-on-linux)
+
+The subsequent manual GitHub Actions run verified the Live `fim-file-created` scenario on `ubuntu-24.04`, from real file creation to the matched indexed alert and confirmed file removal. Browser rendering and an independent installation remain unverified. [Live result and reports](https://github.com/dakonya/DetectionCI/actions/runs/45172139322)
 
 Live observations confirm the remote file state and indexed alerts. They do not independently observe every collection or manager-processing stage. Negative live assertions remain inconclusive without independent collection-coverage evidence. VM restoration is an operator action; the controller preserves a block after unverified cleanup or interruption.
 

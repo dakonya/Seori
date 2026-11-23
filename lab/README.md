@@ -1,6 +1,6 @@
 # Wazuh and Linux lab
 
-This guide prepares the separate lab for live tests. All three SSH scenarios passed on Wazuh Manager **4.14.10-1** using pre-recorded logs. Live verification with a Wazuh agent and indexer remains pending. [Linux/Podman replay and JSON reports](../README.md#replay-ssh-logs-on-linux)
+This guide prepares a separate lab for local live tests. The manual GitHub Actions workflow already verified `fim-file-created` using the hosted Ubuntu VM as the agent host and running Wazuh Manager and Indexer in containers. [Passing Live run and reports](https://github.com/dakonya/DetectionCI/actions/runs/45172139322)
 
 ## Topology and requirements
 
