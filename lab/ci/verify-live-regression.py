@@ -107,12 +107,12 @@ def verify_sequence(directory, regression, agent_id, regression_matches):
 
     require(len({baseline["id"], regression["id"], restored["id"]}) == 3, "The phases must have distinct run IDs")
     require(baseline["scenario"] == regression["scenario"] == restored["scenario"],
-            "The DetectionCI scenario changed between phases")
+            "The Seori scenario changed between phases")
     require(timestamp(baseline["finished_at"]) <= timestamp(regression["started_at"])
             and timestamp(regression["finished_at"]) <= timestamp(restored["started_at"]),
             "The three phases were not run sequentially")
     require(len({run["result"]["metadata"]["operator_config_sha256"] for run in (baseline, regression, restored)}) == 1,
-            "The DetectionCI operator configuration changed between phases")
+            "The Seori operator configuration changed between phases")
 
     rows = []
     for phase, run, rule in (("Baseline", baseline, "100200"), ("Regression", regression, "554"),
@@ -122,7 +122,7 @@ def verify_sequence(directory, regression, agent_id, regression_matches):
         rows.append(f'| {phase} | {run["verdict"]} | `100200` | `{rule}` | {matches} | Confirmed |')
     return "\n".join([
         "### Live FIM rule regression", "",
-        "| Phase | DetectionCI verdict | Expected rule | Observed rule | Matches | Cleanup |",
+        "| Phase | Seori verdict | Expected rule | Observed rule | Matches | Cleanup |",
         "| --- | --- | --- | --- | ---: | --- |", *rows, "",
         f"All phases used Wazuh agent `{agent_id}` and a separate file named for the run ID.", "",
         f'- Baseline run ID `{baseline["id"]}`',

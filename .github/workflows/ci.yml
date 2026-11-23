@@ -1,4 +1,4 @@
-name: DetectionCI software checks
+name: Seori software checks
 
 on:
   push:
@@ -24,14 +24,14 @@ jobs:
       - name: Unit and controlled transport tests
         run: python -m unittest discover -s tests -v
       - name: Compile source
-        run: python -m compileall -q detectionci tests lab
+        run: python -m compileall -q seori detectionci tests lab
       - name: Validate scenarios and declared fixture outcomes
         run: |
-          python -m detectionci validate
-          python -m detectionci --scenarios fixtures/fault-scenarios validate
-          python -m detectionci verify-fixtures
+          python -m seori validate
+          python -m seori --scenarios fixtures/fault-scenarios validate
+          python -m seori verify-fixtures
       - name: Run default synthetic fixture suite
-        run: python -m detectionci suite --mode fixture --output artifacts/fixture-suite
+        run: python -m seori suite --mode fixture --output artifacts/fixture-suite
 
 # This workflow never runs SSH actions or receives Wazuh credentials.
 # Live checks require a separate trusted environment and explicit operator setup.

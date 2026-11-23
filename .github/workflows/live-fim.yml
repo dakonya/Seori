@@ -29,7 +29,7 @@ jobs:
       - name: Measure available space before deployment
         id: disk_before
         run: |
-          work_dir="$RUNNER_TEMP/detectionci-live"
+          work_dir="$RUNNER_TEMP/seori-live"
           install -d -m 0700 "$work_dir" "$work_dir/reports"
           docker_root=$(docker info --format '{{.DockerRootDir}}')
           printf 'DCI_CI_DIR=%s\nDCI_CI_DOCKER_ROOT=%s\n' "$work_dir" "$docker_root" >> "$GITHUB_ENV"
@@ -59,7 +59,7 @@ jobs:
             printf '```\n\n'
           } | tee -a "$GITHUB_STEP_SUMMARY"
 
-      - name: Configure DetectionCI
+      - name: Configure Seori
         run: |
           umask 077
           set -a
@@ -100,7 +100,7 @@ jobs:
           set -a
           source "$DCI_CI_DIR/wazuh.env"
           set +a
-          python3 -m detectionci --db "$DCI_CI_DIR/runs.sqlite3" --config "$DCI_CI_DIR/config.json" \
+          python3 -m seori --db "$DCI_CI_DIR/runs.sqlite3" --config "$DCI_CI_DIR/config.json" \
             run fim-file-created --mode live --output "$DCI_CI_DIR/reports"
           PYTHONPATH=. python3 lab/ci/verify-live-report.py "$DCI_CI_DIR/reports" "$DCI_CI_AGENT_ID" \
             | tee -a "$GITHUB_STEP_SUMMARY"
@@ -112,7 +112,7 @@ jobs:
           shopt -s nullglob
           reports=("$DCI_CI_DIR/reports/"*.json)
           if (( ${#reports[@]} == 0 )); then
-            echo 'DetectionCI did not export a JSON report.'
+            echo 'Seori did not export a JSON report.'
             exit 0
           fi
           set -a
@@ -127,8 +127,8 @@ jobs:
         with:
           name: live-fim-report
           path: |
-            ${{ runner.temp }}/detectionci-live/reports/*.json
-            ${{ runner.temp }}/detectionci-live/reports/*.html
+            ${{ runner.temp }}/seori-live/reports/*.json
+            ${{ runner.temp }}/seori-live/reports/*.html
           if-no-files-found: error
 
       - name: Demonstrate PASS, FAIL, PASS in live mode
@@ -141,10 +141,10 @@ jobs:
         with:
           name: live-fim-regression
           path: |
-            ${{ runner.temp }}/detectionci-live/reports/*/*.json
-            ${{ runner.temp }}/detectionci-live/reports/*/*.html
-            ${{ runner.temp }}/detectionci-live/reports/regression-evidence.json
-            ${{ runner.temp }}/detectionci-live/reports/results.md
+            ${{ runner.temp }}/seori-live/reports/*/*.json
+            ${{ runner.temp }}/seori-live/reports/*/*.html
+            ${{ runner.temp }}/seori-live/reports/regression-evidence.json
+            ${{ runner.temp }}/seori-live/reports/results.md
           if-no-files-found: error
 
       - name: Collect service status on failure

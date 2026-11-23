@@ -51,7 +51,7 @@ class DetectionServer(ThreadingHTTPServer):
 
 
 class Handler(BaseHTTPRequestHandler):
-    server_version = "DetectionCI/" + __version__
+    server_version = "Seori/" + __version__
     sys_version = ""
 
     def setup(self):

@@ -46,7 +46,7 @@ class Store:
         with self._connection() as connection:
             version = connection.execute("PRAGMA user_version").fetchone()[0]
             if version > 1:
-                raise ValueError("database schema is newer than this DetectionCI version")
+                raise ValueError("database schema is newer than this Seori version")
             connection.executescript("""
                 CREATE TABLE IF NOT EXISTS runs (
                     id TEXT PRIMARY KEY,

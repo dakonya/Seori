@@ -1,6 +1,6 @@
 # Threat model
 
-DetectionCI reads security logs and can perform restricted actions on a lab endpoint. Its API, scenarios, credentials and exported evidence cross separate trust boundaries.
+Seori reads security logs and can perform restricted actions on a lab endpoint. Its API, scenarios, credentials and exported evidence cross separate trust boundaries.
 
 | Asset or boundary | Failure to consider | Current control and practical limit |
 | --- | --- | --- |

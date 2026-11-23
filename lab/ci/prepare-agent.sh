@@ -11,7 +11,7 @@ fi
 
 ci_dir=$1
 script_dir=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)
-agent_name=detectionci-live
+agent_name=seori-live
 agent_version=4.14.10-1
 ssh_user=dci-fim
 ssh_port=2222

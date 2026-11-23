@@ -27,6 +27,8 @@ import threading
 from typing import Any
 from urllib import error, parse, request
 
+from . import __version__
+
 
 class WazuhError(RuntimeError):
     """A bounded, credential-free transport or response validation error."""
@@ -211,7 +213,7 @@ class WazuhClient:
     def _request(self, base: str, method: str, path: str, *, auth: str,
                  payload: Any = None, raw: bool = False, phase: str = "Wazuh request") -> Any:
         body = None if payload is None else json.dumps(payload, ensure_ascii=False, allow_nan=False).encode()
-        headers = {"Authorization": auth, "Accept": "application/json", "User-Agent": "DetectionCI/0.1"}
+        headers = {"Authorization": auth, "Accept": "application/json", "User-Agent": f"Seori/{__version__}"}
         if body is not None:
             headers["Content-Type"] = "application/json"
         req = request.Request(base + path, data=body, headers=headers, method=method)

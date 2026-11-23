@@ -1,20 +1,20 @@
-# DetectionCI v0.1 — запуск и текущий результат
+# Seori (서리) — запуск и результаты проверок
 
-Это первая реализованная версия проекта. Контроллер написан на Python, данные хранятся в SQLite. Веб-интерфейс работает без npm, CDN и сторонних JavaScript-библиотек. Для локальных проверок нужен Python 3.11+ под Linux/macOS; под Windows используется WSL2.
+Seori проверяет, как изменение правил Wazuh влияет на обнаружение событий. Ранние отчёты опубликованы под прежним названием DetectionCI. Контроллер написан на Python, данные хранятся в SQLite. Веб-интерфейс работает без npm, CDN и сторонних JavaScript-библиотек. Для локальных проверок нужен Python 3.11+ под Linux/macOS; под Windows используется WSL2.
 
 ## Быстрый запуск
 
 Открой терминал в корневом каталоге проекта после клонирования.
 
 ```bash
-python3 -m detectionci verify-fixtures
-python3 -m detectionci suite --mode fixture --output reports
-python3 -m detectionci serve
+python3 -m seori verify-fixtures
+python3 -m seori suite --mode fixture --output reports
+python3 -m seori serve
 ```
 
 После последней команды открой http://127.0.0.1:8787. Сервис работает, пока открыт терминал; Ctrl+C завершает его с отменой активного задания и ограниченным по времени ожиданием очистки.
 
-Если проект скачан как ZIP, сначала распакуй его и перейди в получившуюся папку `DetectionCI`. Установка пакетов для этих команд не нужна.
+Если проект скачан как ZIP, распакуй архив и открой папку с `pyproject.toml`. После установки пакета доступна команда `seori`. Для старых скриптов сохранены команды `detectionci` и `python3 -m detectionci`. При запуске из прежней папки проекта доступна та же история SQLite.
 
 ## Что уже реализовано
 
@@ -46,23 +46,25 @@ Fixture PASS не доказывает обнаружение атаки нас�
 Три SSH-сценария прошли в режиме Replay на Wazuh Manager **4.14.10-1** с заранее записанными логами. После установки Podman запусти прогон из корня проекта от обычного пользователя.
 
 ```bash
-bash lab/detectionci-replay.sh --suite
+bash lab/seori-replay.sh --suite
 ```
 
 Таблица в README показывает ожидаемые и фактические идентификаторы правил и содержит ссылки на три JSON-отчёта. [Результаты Replay](README.md#replay-ssh-logs-on-linux)
 
-Сценарий `fim-file-created` прошёл в режиме Live на стандартном раннере `ubuntu-24.04`. DetectionCI нашёл в Indexer алерт `100200` с событием `added`, ID зарегистрированного агента и путём файла этого прогона. Workflow также подтвердил удаление файла. JSON и HTML доступны в артефакте `live-fim-report`. [Успешный запуск](https://github.com/dakonya/DetectionCI/actions/runs/45172139322)
+Сценарий `fim-file-created` прошёл в режиме Live на стандартном раннере `ubuntu-24.04`. Seori нашёл в Indexer алерт `100200` с событием `added`, ID зарегистрированного агента и путём файла этого прогона. Workflow также подтвердил удаление файла. JSON и HTML доступны в артефакте `live-fim-report`. [Успешный запуск](https://github.com/dakonya/Seori/actions/runs/45172139322)
 
-Для повтора открой **Live FIM smoke test** в Actions и нажми **Run workflow**. [Ручной запуск](https://github.com/dakonya/DetectionCI/actions/workflows/live-fim.yml)
+Отдельный эксперимент показал **PASS → FAIL → PASS** после изменения и восстановления фильтра пути. В средней фазе событие о создании файла дошло до Indexer с правилом `554`, а для ожидаемого правила `100200` было ноль совпадений. [Таблица результатов](examples/live-fim-regression/README.md)
+
+Для повтора открой **Live FIM smoke test** в Actions и нажми **Run workflow**. [Ручной запуск](https://github.com/dakonya/Seori/actions/workflows/live-fim.yml)
 
 Для локального live-стенда нужны отдельная Linux VM с агентом Wazuh, проверенный SSH host key, доступ к API и корректные TLS-сертификаты. [Лабораторная инструкция](lab/README.md)
 
 После аварии либо неподтверждённой очистки последующие live-запуски блокируются. Команда `target status` показывает причину. Сброс разрешён только при остановленном worker:
 
 ```bash
-python3 -m detectionci target status
+python3 -m seori target status
 # Сначала независимо восстанови тестовую VM.
-python3 -m detectionci target reset --acknowledge-restored
+python3 -m seori target reset --acknowledge-restored
 ```
 
 Сброс подтверждает выполненное оператором восстановление; он не восстанавливает VM самостоятельно. Контроллер слушает только loopback. Для доступа с другой машины используется SSH-туннель.

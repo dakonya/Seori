@@ -2,9 +2,9 @@
 
 ## Wazuh integration status
 
-All three SSH replay scenarios passed on Wazuh Manager **4.14.10-1** with pre-recorded log lines. The reports record the manager's logtest results and the assertions applied to them. During public release preparation on 23 November 2026, `bash lab/detectionci-replay.sh --suite` reproduced all three PASS verdicts on the same manager version. [Replay command and JSON reports](../README.md#replay-ssh-logs-on-linux)
+All three SSH replay scenarios passed on Wazuh Manager **4.14.10-1** with pre-recorded log lines. The reports record the manager's logtest results and the assertions applied to them. During public release preparation on 23 November 2026, the Replay suite reproduced all three PASS verdicts on the same manager version. [Replay command and JSON reports](../README.md#replay-ssh-logs-on-linux)
 
-The **Live FIM smoke test** workflow passed `fim-file-created` in one manually dispatched run. The Wazuh agent monitored the standard `ubuntu-24.04` runner VM, with Wazuh Manager and Indexer **4.14.10** in containers on that runner. DetectionCI matched an indexed alert for rule `100200` with `syscheck.event=added`, the registered agent ID and the unique file path. The workflow also confirmed removal of that file. The run includes disk-space measurements and the `live-fim-report` JSON and HTML artifact. Live modification and deletion scenarios remain unverified. [Passing workflow run](https://github.com/dakonya/DetectionCI/actions/runs/45172139322)
+The **Live FIM smoke test** workflow passed `fim-file-created` in one manually dispatched run. The Wazuh agent monitored the standard `ubuntu-24.04` runner VM, with Wazuh Manager and Indexer **4.14.10** in containers on that runner. Seori matched an indexed alert for rule `100200` with `syscheck.event=added`, the registered agent ID and the unique file path. The workflow also confirmed removal of that file. The run includes disk-space measurements and the `live-fim-report` JSON and HTML artifact. Live modification and deletion scenarios remain unverified. [Passing workflow run](https://github.com/dakonya/Seori/actions/runs/45172139322)
 
 ## Initial build verification
 
@@ -30,10 +30,10 @@ On Python 3.13.5, all 152 unit and transport tests passed, including the five lo
 
 ```bash
 python3 -m unittest discover -s tests -v
-python3 -m compileall -q detectionci tests
-python3 -m detectionci validate
-python3 -m detectionci verify-fixtures
-python3 -m detectionci suite --mode fixture --output artifacts/fixture-suite
+python3 -m compileall -q seori detectionci tests
+python3 -m seori validate
+python3 -m seori verify-fixtures
+python3 -m seori suite --mode fixture --output artifacts/fixture-suite
 ```
 
 The default catalogue contains twelve synthetic fixtures. The separate fault catalogue contains four intentionally non-passing cases. `verify-fixtures` checks that those cases produce their declared results; it does not turn a security FAIL into PASS.

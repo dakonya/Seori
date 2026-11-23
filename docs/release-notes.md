@@ -1,4 +1,8 @@
-# DetectionCI 0.1.0
+# Seori release notes
+
+The original v0.1.0 tag and the following published results carry the former project name, DetectionCI.
+
+## Version 0.1.0
 
 This release implements a local detection-validation controller, SQLite run state, CLI, dashboard, redacted reports and immutable baselines. It has three execution scopes: synthetic fixture logic, native Wazuh replay, and a constrained SSH/FIM live path.
 
@@ -16,7 +20,7 @@ The initial build recorded 147 successful automated tests, five skipped socket t
 
 The initial build environment did not run Wazuh integration. All three SSH scenarios later passed on Wazuh Manager **4.14.10-1** using pre-recorded log lines. [Replay results and reports](../README.md#replay-ssh-logs-on-linux)
 
-The subsequent manual GitHub Actions run verified the Live `fim-file-created` scenario on `ubuntu-24.04`, from real file creation to the matched indexed alert and confirmed file removal. Browser rendering and an independent installation remain unverified. [Live result and reports](https://github.com/dakonya/DetectionCI/actions/runs/45172139322)
+The subsequent manual GitHub Actions run verified the Live `fim-file-created` scenario on `ubuntu-24.04`, from real file creation to the matched indexed alert and confirmed file removal. Browser rendering and an independent installation remain unverified. [Live result and reports](https://github.com/dakonya/Seori/actions/runs/45172139322)
 
 Live observations confirm the remote file state and indexed alerts. They do not independently observe every collection or manager-processing stage. Negative live assertions remain inconclusive without independent collection-coverage evidence. VM restoration is an operator action; the controller preserves a block after unverified cleanup or interruption.
 

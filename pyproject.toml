@@ -3,7 +3,7 @@ requires = ["setuptools>=68"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "detectionci"
+name = "seori"
 version = "0.1.0"
 description = "Evidence-based Wazuh detection validation with fixture, replay and live modes"
 requires-python = ">=3.11"
@@ -13,10 +13,11 @@ license = {text = "MIT"}
 classifiers = ["Programming Language :: Python :: 3", "Operating System :: POSIX :: Linux", "Topic :: Security"]
 
 [project.scripts]
+seori = "detectionci.cli:main"
 detectionci = "detectionci.cli:main"
 
 [tool.setuptools.packages.find]
-include = ["detectionci*"]
+include = ["seori*", "detectionci*"]
 
 [tool.setuptools.package-data]
 detectionci = ["static/*"]

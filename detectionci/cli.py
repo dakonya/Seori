@@ -1,4 +1,4 @@
-"""DetectionCI command line. Only verified passing runs return exit status zero."""
+"""Seori command line. Only verified passing runs return exit status zero."""
 from __future__ import annotations
 
 import argparse
@@ -20,7 +20,7 @@ from .worker import Worker
 
 
 def parser():
-    p = argparse.ArgumentParser(prog="detectionci", description="Reproducible detection validation. Fixture results do not attest a real SIEM.")
+    p = argparse.ArgumentParser(prog="seori", description="Reproducible detection validation. Fixture results do not attest a real SIEM.")
     p.add_argument("--version", action="version", version=__version__)
     p.add_argument("--db", default=".detectionci/runs.sqlite3", help="Local SQLite state (default: .detectionci/runs.sqlite3)")
     p.add_argument("--config", default=os.environ.get("DCI_CONFIG"), help="JSON configuration; supports complete ${DCI_*} environment references")
@@ -199,7 +199,7 @@ def main(argv=None):
             server = DetectionServer((args.host, args.port), store, catalog, worker, os.environ.get("DCI_API_TOKEN"))
             try:
                 worker.start()
-                print(f"DetectionCI {__version__}: http://{args.host}:{server.server_port}", flush=True)
+                print(f"Seori {__version__}: http://{args.host}:{server.server_port}", flush=True)
                 print("Fixture runs validate local logic only. Live Wazuh verification requires a configured laboratory.", flush=True)
                 server.serve_forever(poll_interval=.2)
             finally:
@@ -211,7 +211,7 @@ def main(argv=None):
         return 130
     except (ValueError, OSError, RuntimeError, TimeoutError, KeyError, json.JSONDecodeError) as exc:
         # Config and operator errors must not print credential-bearing values.
-        print(f"DetectionCI: {str(exc)[:400]}", file=sys.stderr)
+        print(f"Seori: {str(exc)[:400]}", file=sys.stderr)
         return 2
 
 

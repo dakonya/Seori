@@ -1,14 +1,14 @@
 # Wazuh and Linux lab
 
-This guide prepares a separate lab for local live tests. The manual GitHub Actions workflow already verified `fim-file-created` using the hosted Ubuntu VM as the agent host and running Wazuh Manager and Indexer in containers. [Passing Live run and reports](https://github.com/dakonya/DetectionCI/actions/runs/45172139322)
+This guide prepares a separate lab for local live tests. The manual GitHub Actions workflow already verified `fim-file-created` using the hosted Ubuntu VM as the agent host and running Wazuh Manager and Indexer in containers. [Passing Live run and reports](https://github.com/dakonya/Seori/actions/runs/45172139322)
 
 ## Topology and requirements
 
-Use a Wazuh central installation and a separate Linux VM monitored by its agent. The DetectionCI controller connects to the manager API for replay, to the indexer for live alert queries and to the VM through OpenSSH for the restricted file action.
+Use a Wazuh central installation and a separate Linux VM monitored by its agent. The Seori controller connects to the manager API for replay, to the indexer for live alert queries and to the VM through OpenSSH for the restricted file action.
 
 The reference Wazuh Docker release is **v4.14.10**. The official quickstart recommends 4 vCPU, 8 GiB RAM and 50 GB of storage for a small central deployment. A 16 GB laptop running a browser, a central installation and a VM needs an actual resource check; no performance or memory measurements of that topology are available yet.
 
-DetectionCI itself requires Python 3.11+ on Linux or macOS. On Windows use WSL2. The target needs Python 3, OpenSSH and the Wazuh agent; the three live file operations do not require root execution.
+Seori itself requires Python 3.11+ on Linux or macOS. On Windows use WSL2. The target needs Python 3, OpenSSH and the Wazuh agent; the three live file operations do not require root execution.
 
 ## 1. Prepare the official central stack
 
@@ -54,7 +54,7 @@ The directory must exist before the agent starts watching it. Record its actual 
 
 ## 3. Configure trust and credentials
 
-Verify the VM's SSH host-key fingerprint through its console or another independent trusted channel. Build a dedicated `known_hosts` file and confirm the fingerprint before the first live run. `ssh-keyscan` can collect a key but cannot authenticate it by itself. DetectionCI does not disable host-key verification.
+Verify the VM's SSH host-key fingerprint through its console or another independent trusted channel. Build a dedicated `known_hosts` file and confirm the fingerprint before the first live run. `ssh-keyscan` can collect a key but cannot authenticate it by itself. Seori verifies the configured SSH host key.
 
 Configure a certificate chain trusted by the controller for both the Wazuh manager API and indexer. The server certificate's names must match `manager_url` or `indexer_url`. The manager API's certificate is separate from the manager's event-transport certificate; do not assume the Docker stack's generated indexer CA automatically covers every API certificate. Configure the API certificate according to the pinned Wazuh documentation.
 
@@ -65,9 +65,9 @@ Create a dedicated manager identity allowed to use logtest, and a separate index
 Edit `config.example.json` and export its referenced values:
 
 ```bash
-export DCI_WAZUH_MANAGER_USERNAME='detectionci'
+export DCI_WAZUH_MANAGER_USERNAME='seori'
 export DCI_WAZUH_MANAGER_PASSWORD='your-manager-password'
-export DCI_WAZUH_INDEXER_USERNAME='detectionci-reader'
+export DCI_WAZUH_INDEXER_USERNAME='seori-reader'
 export DCI_WAZUH_INDEXER_PASSWORD='your-indexer-password'
 ```
 
@@ -78,8 +78,8 @@ The configuration loader expands an entire `${DCI_*}` string from the environmen
 Use these commands to check replay against the manager configured for this lab. The Podman command in the project README runs all three SSH scenarios in a dedicated container. [Podman quick start](../README.md#replay-ssh-logs-on-linux)
 
 ```bash
-python3 -m detectionci --config lab/config.example.json run ssh-invalid-user --mode replay --output artifacts/replay-ssh
-python3 -m detectionci --config lab/config.example.json run ssh-success-control --mode replay --output artifacts/replay-control
+python3 -m seori --config lab/config.example.json run ssh-invalid-user --mode replay --output artifacts/replay-ssh
+python3 -m seori --config lab/config.example.json run ssh-success-control --mode replay --output artifacts/replay-control
 ```
 
 These commands submit saved strings to Wazuh logtest. They do not attempt SSH authentication or confirm agent collection. Each scenario uses an isolated session so the single-failure control is not contaminated by a prior burst.
@@ -89,9 +89,9 @@ These commands submit saved strings to Wazuh logtest. They do not attempt SSH au
 Take a clean VM snapshot before the first live suite. Ensure the agent's initial scan completed and alerts are indexed. Then run:
 
 ```bash
-python3 -m detectionci --config lab/config.example.json run fim-file-created --mode live --output artifacts/live-create
-python3 -m detectionci --config lab/config.example.json run fim-file-modified --mode live --output artifacts/live-modify
-python3 -m detectionci --config lab/config.example.json run fim-file-deleted --mode live --output artifacts/live-delete
+python3 -m seori --config lab/config.example.json run fim-file-created --mode live --output artifacts/live-create
+python3 -m seori --config lab/config.example.json run fim-file-modified --mode live --output artifacts/live-modify
+python3 -m seori --config lab/config.example.json run fim-file-deleted --mode live --output artifacts/live-delete
 ```
 
 The executor streams a fixed Python implementation over SSH. The scenario cannot replace it with arbitrary code. It operates on a newly generated path under the configured watch root. For modification and deletion, the engine first creates a baseline and waits until its added event is actually observed before performing the measured operation.
@@ -113,13 +113,13 @@ No broad ATT&CK technique coverage is inferred from these harmless file operatio
 The controller places a durable dirty marker before live execution. A crash or unverified cleanup leaves the target blocked for further live jobs. Inspect it with:
 
 ```bash
-python3 -m detectionci target status
+python3 -m seori target status
 ```
 
 Stop the worker, restore the VM externally and check its state. Only then acknowledge the restoration:
 
 ```bash
-python3 -m detectionci target reset --acknowledge-restored
+python3 -m seori target reset --acknowledge-restored
 ```
 
 The reset command records the operator's acknowledgement; it does not restore a VM. Snapshot management and an external watchdog are not included. A clean normal cleanup result is useful evidence but does not guarantee recovery after the controller machine fails.

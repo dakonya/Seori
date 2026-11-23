@@ -20,7 +20,7 @@ export PYTHONPATH=.
 run_phase() {
     local phase=$1
     printf '\n=== %s ===\n' "$phase"
-    python3 -m detectionci --db "$ci_dir/runs.sqlite3" --config "$config" \
+    python3 -m seori --db "$ci_dir/runs.sqlite3" --config "$config" \
         run fim-file-created --mode live --output "$reports/$phase"
 }
 
@@ -34,7 +34,7 @@ if run_phase regression; then
 else
     status=$?
     if (( status != 1 )); then
-        printf 'Unexpected DetectionCI exit status in regression phase: %s\n' "$status" >&2
+        printf 'Unexpected Seori exit status in regression phase: %s\n' "$status" >&2
         exit "$status"
     fi
 fi

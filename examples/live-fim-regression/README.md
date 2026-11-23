@@ -1,8 +1,10 @@
 # Live FIM rule regression
 
-DetectionCI ran `fim-file-created` in live mode on a standard GitHub-hosted `ubuntu-24.04` runner with Wazuh Manager and Agent 4.14.10-1 and Indexer 4.14.10. [Successful Actions run](https://github.com/dakonya/DetectionCI/actions/runs/45182772256) · [Original JSON and HTML reports](https://github.com/dakonya/DetectionCI/actions/runs/45182772256/artifacts/14822681987)
+Seori ran `fim-file-created` in live mode on a standard GitHub-hosted `ubuntu-24.04` runner with Wazuh Manager and Agent 4.14.10-1 and Indexer 4.14.10. [Successful Actions run](https://github.com/dakonya/Seori/actions/runs/45182772256) · [Original JSON and HTML reports](https://github.com/dakonya/Seori/actions/runs/45182772256/artifacts/14822681987)
 
-| Phase | DetectionCI verdict | Expected rule | Observed rule | Matches | Cleanup |
+The original JSON, HTML and workflow logs were published under the name DetectionCI.
+
+| Phase | Seori verdict | Expected rule | Observed rule | Matches | Cleanup |
 | --- | --- | --- | --- | ---: | --- |
 | Baseline | PASS | `100200` | `100200` | 1 | Confirmed |
 | Regression | FAIL | `100200` | `554` | 0 | Confirmed |

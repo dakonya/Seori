@@ -82,7 +82,7 @@
       try { return JSON.parse(payload); } catch (_) { throw new Error("Controller returned invalid JSON."); }
     } catch (error) {
       if (error.name === "AbortError") throw new Error("Controller request timed out. Its execution state may still have changed; refresh before retrying an action.");
-      if (error instanceof TypeError) throw new Error("Cannot reach the controller. Check that DetectionCI is running.");
+      if (error instanceof TypeError) throw new Error("Cannot reach the controller. Check that Seori is running.");
       throw error;
     } finally { window.clearTimeout(timer); }
   }
@@ -430,7 +430,7 @@
       const response = await request("/api/runs/" + encodeURIComponent(id) + "/report?format=" + format, { raw: true });
       const blob = new Blob([response.payload], { type: format === "json" ? "application/json" : "text/html" });
       const url = URL.createObjectURL(blob);
-      const anchor = node("a", { href: url, download: "detectionci-" + String(id).replace(/[^a-zA-Z0-9_-]/g, "").slice(0, 64) + "." + format });
+      const anchor = node("a", { href: url, download: "seori-" + String(id).replace(/[^a-zA-Z0-9_-]/g, "").slice(0, 64) + "." + format });
       document.body.append(anchor); anchor.click(); anchor.remove();
       window.setTimeout(() => URL.revokeObjectURL(url), 1500);
     } catch (error) { notice(errorMessage(error), "error"); }

@@ -93,11 +93,11 @@ class Worker:
         except OSError as exc:
             self.lock_file.close()
             self.lock_file = None
-            raise RuntimeError("Another DetectionCI worker owns this database") from exc
+            raise RuntimeError("Another Seori worker owns this database") from exc
         try:
             self.store.recover_interrupted()
             self.stop_event.clear()
-            self.thread = threading.Thread(target=self._loop, name="detectionci-worker", daemon=True)
+            self.thread = threading.Thread(target=self._loop, name="seori-worker", daemon=True)
             self.thread.start()
         except BaseException:
             self.lock_file.close()
@@ -131,7 +131,7 @@ class Worker:
                             self.active_cancel.set()
                             return
 
-                watcher = threading.Thread(target=watch_cancel, name="detectionci-cancel", daemon=True)
+                watcher = threading.Thread(target=watch_cancel, name="seori-cancel", daemon=True)
                 watcher.start()
                 try:
                     try:
