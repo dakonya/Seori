@@ -1,7 +1,13 @@
 name: Live FIM smoke test
+run-name: ${{ inputs.regression && 'Live FIM rule regression' || 'Live FIM smoke test' }}
 
 on:
   workflow_dispatch:
+    inputs:
+      regression:
+        description: Demonstrate a temporary regression of rule 100200 and verify recovery
+        type: boolean
+        default: false
 
 permissions:
   contents: read
@@ -10,6 +16,8 @@ jobs:
   fim-created:
     runs-on: ubuntu-24.04
     timeout-minutes: 20
+    env:
+      no_proxy: 127.0.0.1,localhost,wazuh.indexer
     defaults:
       run:
         shell: bash
@@ -51,10 +59,7 @@ jobs:
             printf '```\n\n'
           } | tee -a "$GITHUB_STEP_SUMMARY"
 
-      - name: Run and verify fim-file-created in live mode
-        id: live
-        env:
-          no_proxy: 127.0.0.1,localhost,wazuh.indexer
+      - name: Configure DetectionCI
         run: |
           umask 077
           set -a
@@ -86,6 +91,15 @@ jobs:
           }
           Path(sys.argv[1]).write_text(json.dumps(config), encoding="utf-8")
           PY
+
+      - name: Run and verify fim-file-created in live mode
+        id: live
+        if: ${{ !inputs.regression }}
+        run: |
+          umask 077
+          set -a
+          source "$DCI_CI_DIR/wazuh.env"
+          set +a
           python3 -m detectionci --db "$DCI_CI_DIR/runs.sqlite3" --config "$DCI_CI_DIR/config.json" \
             run fim-file-created --mode live --output "$DCI_CI_DIR/reports"
           PYTHONPATH=. python3 lab/ci/verify-live-report.py "$DCI_CI_DIR/reports" "$DCI_CI_AGENT_ID" \
@@ -115,6 +129,22 @@ jobs:
           path: |
             ${{ runner.temp }}/detectionci-live/reports/*.json
             ${{ runner.temp }}/detectionci-live/reports/*.html
+          if-no-files-found: error
+
+      - name: Demonstrate PASS, FAIL, PASS in live mode
+        if: ${{ inputs.regression }}
+        run: bash lab/ci/run-live-regression.sh "$DCI_CI_DIR"
+
+      - name: Upload verified regression evidence
+        if: ${{ inputs.regression }}
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: live-fim-regression
+          path: |
+            ${{ runner.temp }}/detectionci-live/reports/*/*.json
+            ${{ runner.temp }}/detectionci-live/reports/*/*.html
+            ${{ runner.temp }}/detectionci-live/reports/regression-evidence.json
+            ${{ runner.temp }}/detectionci-live/reports/results.md
           if-no-files-found: error
 
       - name: Collect service status on failure

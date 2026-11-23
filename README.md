@@ -28,6 +28,16 @@ Open **Live FIM smoke test** in Actions and choose **Run workflow**. The standar
 
 DetectionCI found indexed rule `100200` with `syscheck.event=added`, the registered agent ID and the unique run path. The workflow also confirmed the file was removed. Download the JSON and HTML from the `live-fim-report` artifact. [Run artifact](https://github.com/dakonya/DetectionCI/actions/runs/45172139322/artifacts/14817052716)
 
+### Reproduce a rule regression
+
+Enable **regression** when dispatching the Live FIM workflow, or run this command from the repository root.
+
+```bash
+gh workflow run live-fim.yml --ref main -f regression=true
+```
+
+The workflow runs `fim-file-created` three times with distinct run IDs. It changes the path filter of rule `100200` in the temporary Manager configuration, then restores the original XML. The middle run must record a native FAIL with zero matches. A separate Indexer query must find Wazuh rule `554` for the same agent, file path and time window. The job passes only after both runs with the original rule pass and all three file removals are confirmed.
+
 ## Run locally
 
 Requirements: Python 3.11 or newer on Linux or macOS; Windows users can run it in WSL2. The application uses the standard library and SQLite; no package download is required for fixture mode.

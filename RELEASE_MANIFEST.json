@@ -1,7 +1,7 @@
 {
   "name": "DetectionCI",
   "version": "0.1.0",
-  "source_files": 65,
+  "source_files": 67,
   "verification": "docs/verification-results.json",
   "verification_scope": "Initial build",
   "files": [
@@ -11,7 +11,7 @@
     },
     {
       "path": ".github/workflows/live-fim.yml",
-      "sha256": "8f62b11906147111ce60dd1aacd91144cfe960508d5a85401107149dc883a810"
+      "sha256": "79ae57288326d13b4a14f2ec1d1733d1a515472644f4154caa48d72a6bc807f2"
     },
     {
       "path": ".gitignore",
@@ -23,7 +23,7 @@
     },
     {
       "path": "README.md",
-      "sha256": "8ec2fd8676703c459e1f16493a4de3312dc485782260fce06f73e8984849e328"
+      "sha256": "6ebdea6f78723f0de0b9fa16281203854dc72b7d869a3c5ccf873f1014e0c46b"
     },
     {
       "path": "START_HERE_RU.md",
@@ -162,6 +162,14 @@
       "sha256": "7bf5e4cae7e314cd0e7708a165622b184510a60c0a08b1c846ee840c70853328"
     },
     {
+      "path": "lab/ci/run-live-regression.sh",
+      "sha256": "2c44a5e327edb9150edbc9cb5bb6cd8f6f35f7b16e44a69972a5f632615c2bd7"
+    },
+    {
+      "path": "lab/ci/verify-live-regression.py",
+      "sha256": "785cdb91c414a075bceff192d6f45da14eb49ddbc9fae5a347ee9a9534b547c4"
+    },
+    {
       "path": "lab/ci/verify-live-report.py",
       "sha256": "21421e6f3be8691ea375bab3253ddb5a12d266a60015f84b8a6a3c06e775170f"
     },
@@ -171,7 +179,7 @@
     },
     {
       "path": "lab/ci/wazuh-stack.sh",
-      "sha256": "b3b96a861378c697b3515ff9f0eec1ef28be55bc27d940220ef674e3006f22a4"
+      "sha256": "c8bb7525f0a43f20b939562a5f75fd865ff6dea793cc6f91e4986b60d930511a"
     },
     {
       "path": "lab/config.example.json",

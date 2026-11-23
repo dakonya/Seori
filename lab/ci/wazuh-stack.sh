@@ -3,7 +3,7 @@ set -euo pipefail
 umask 077
 
 if (( $# < 1 )); then
-    printf 'Usage: bash lab/ci/wazuh-stack.sh DIRECTORY [up|agent-id NAME|wait-alerts|diagnostics|down]\n' >&2
+    printf 'Usage: bash lab/ci/wazuh-stack.sh DIRECTORY [up|agent-id NAME|wait-alerts|regress-rule|restore-rule|diagnostics|down]\n' >&2
     exit 2
 fi
 
@@ -78,6 +78,57 @@ filebeat_ready() {
 alerts_ready() {
     indexer_request '/wazuh-alerts-4.x-*/_count' |
         jq --exit-status '._shards.total > 0 and ._shards.failed == 0 and .count > 0' >/dev/null
+}
+
+agent_reconnected() {
+    sudo grep -qx "status='connected'" /var/ossec/var/run/wazuh-agentd.state &&
+        compose exec -T wazuh.manager /var/ossec/bin/agent_control -i "$1" -j |
+        jq --exit-status --arg id "$1" --argjson since "$2" \
+            '.error == 0 and .data.id == $id and .data.status == "Active" and
+             ((.data.lastKeepAlive | tonumber) > $since)' >/dev/null 2>&1
+}
+
+write_phase_rule() {
+    python3 - "$script_dir/../detectionci_fim.xml" "$single_node/config/detectionci_fim.xml" "$command" <<'PY'
+from pathlib import Path
+import re
+import sys
+from tempfile import NamedTemporaryFile
+
+original, staged = map(Path, sys.argv[1:3])
+phase = sys.argv[3]
+if staged.is_symlink() or original.samefile(staged):
+    raise SystemExit("Expected a separate temporary XML file")
+
+baseline = original.read_bytes()
+rules = list(re.finditer(rb'<rule\b[^>]*\bid="100200"[^>]*>.*?</rule>', baseline, re.DOTALL))
+field = b'<field name="file" type="pcre2">^/var/lib/detectionci/watch/</field>'
+if len(rules) != 1 or rules[0].group().count(field) != 1:
+    raise SystemExit("Expected one original path filter in rule 100200")
+
+rule = rules[0]
+regressed_rule = rule.group().replace(field, field.replace(b"/watch/", b"/watch-regression/"))
+regressed = baseline[:rule.start()] + regressed_rule + baseline[rule.end():]
+current = staged.read_bytes()
+if phase == "regress-rule":
+    if current != baseline:
+        raise SystemExit("Temporary Wazuh rules differ from the original XML")
+    replacement = regressed
+else:
+    if current not in (baseline, regressed):
+        raise SystemExit("Temporary Wazuh rules contain unexpected edits")
+    replacement = baseline
+
+with NamedTemporaryFile(dir=staged.parent, delete=False) as copy:
+    temporary = Path(copy.name)
+    try:
+        copy.write(replacement)
+        copy.close()
+        temporary.chmod(0o644)
+        temporary.replace(staged)
+    finally:
+        temporary.unlink(missing_ok=True)
+PY
 }
 
 case "$command" in
@@ -161,6 +212,35 @@ EOF
     wait-alerts)
         load_credentials
         wait_for 'an actual Wazuh alert in Wazuh Indexer' 120 alerts_ready
+        ;;
+    regress-rule|restore-rule)
+        if [[ "${GITHUB_ACTIONS:-}" != true || -z "${RUNNER_TEMP:-}" ||
+              "$run_dir" != "$(realpath -m -- "$RUNNER_TEMP")/"* ]]; then
+            echo 'Rule changes apply only to the temporary GitHub Actions stack.' >&2
+            exit 2
+        fi
+        : "${DCI_CI_AGENT_ID:?A registered Live FIM agent ID is required}"
+        load_credentials
+        write_phase_rule
+
+        # The image copies the mounted XML into /var/ossec at startup. Recreate
+        # the bind mount while retaining Manager, agent registration and Filebeat data.
+        compose up -d --force-recreate --no-deps wazuh.manager
+        manager_container=$(compose ps -q wazuh.manager)
+        manager_started=$(docker inspect --format '{{.State.StartedAt}}' "$manager_container")
+        manager_epoch=$(date -d "$manager_started" +%s)
+        wait_for 'Wazuh Manager analysis, enrollment and agent transport' 180 manager_ready
+
+        expected=$(sha256sum "$single_node/config/detectionci_fim.xml")
+        loaded=$(compose exec -T wazuh.manager sha256sum /var/ossec/etc/rules/detectionci_fim.xml)
+        if [[ "${expected%% *}" != "${loaded%% *}" ]]; then
+            echo 'The active Wazuh FIM XML does not match the staged rule.' >&2
+            exit 1
+        fi
+        printf 'Active FIM XML SHA-256 %s\n' "${loaded%% *}"
+        wait_for 'Filebeat output to Wazuh Indexer' 90 filebeat_ready
+        wait_for "agent $DCI_CI_AGENT_ID keepalive after Manager restart" 150 \
+            agent_reconnected "$DCI_CI_AGENT_ID" "$manager_epoch"
         ;;
     diagnostics)
         [[ -f "$credentials" && -f "$single_node/docker-compose.yml" ]] || exit 0
